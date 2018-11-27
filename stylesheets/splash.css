@@ -2,6 +2,7 @@
 
 body {
     font-family: fantasy;
+	background-image: url("../images/CheckersBoardGame.jpeg");
 }
 
 h1 {
@@ -13,12 +14,10 @@ h1 {
 }
 
 h1::before {
-    content: "★ ";
     color: var(--main-red);
 }
 
  h2::after {
-    content: " ★";
     color: var(--main-red);
 }
 
@@ -31,7 +30,6 @@ h2 {
 }
 
 h3::before {
-    content: "★ ";
     color: var(--main-red);
 }
 h3 {
@@ -81,13 +79,13 @@ h3 {
 #left {
     float: left;
     width: 70%;
-    background-color: #555
 }
 
 #right {
     float: left;
     width: 30%;
-    background-color: #AAA;
+    background-color: rgb(0,0,0,0.5);
+	color: rgb(228,209,166);
 }
 
 #b1 {
@@ -111,13 +109,17 @@ h3 {
     background-color: #aaa;
 }
 
+#explanation {
+	padding: 1%;
+}
+
 button {
     position: absolute;
     background-color: var(--main-red);
     color: #fff;
-    bottom: 100px;
-    right: 250px;
-    font-size: 700%;
+    bottom: 10%;
+    right: 30%;
+    font-size: 600%;
     border: none;
     padding: 30px;
     width: 30%;
