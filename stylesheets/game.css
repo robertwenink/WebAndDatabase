@@ -1,5 +1,9 @@
 @import 'style.css';
 
+main {
+	background-color: #096132;
+}
+
 #board {
 	background-image: url("../images/board.jpg");
 	background-repeat: no-repeat;
@@ -7,15 +11,15 @@
 	width: 100vh;
 	height: 100vh;
 	margin: auto;
+	display:inline-block;
 }
 
 #tilescontainer {
-	float: left;
 	height: 79.5%;
 	width: 79.4%;
 	padding:10.2% 10.15% 10.5% 10.45%;
 	/* background-color: rgb(10,110,20,0.5); */
-	display: block;
+	float: left;
 }
 
 #tiles {
@@ -32,16 +36,58 @@
     height: 12.5%;
 	float: left;
 }
+
 .darktile {
     background-color: rgb(0,0,0,0.1);
     text-align: center;
-    /* box-shadow: 0 15px 10px -10px rgba(31, 31, 31, 0.5); */
+	background-size: 100%;
 }
 
 .darktile:hover {
     box-shadow: 0px 0px 80px 80px rgba(0,0,0,0.2) inset;
 	background-color: rgb(200,56,56,0.2);
 }
+
+#game {
+	display: inline-block; 
+}
+
+#scorePlayer , #scoreOpponent {
+	height: 39.75vh;
+	width: 29.8vh;
+}
+
+.scoreTile {
+	height: 25%;
+	width: 33.3333%;
+}
+
+#scorePlayer{
+	margin-top: 20.5vh;
+	position: relative;
+}
+
+#scoreOpponent {
+	
+}
+
+.whitePiece , .blackPiece {
+	
+	background-repeat: no-repeat;
+	background-size: auto 100%;
+	height: 100%;
+	width: 100%;
+}
+
+.blackPiece {
+	background-image: url("../images/black.png");
+}
+
+.whitePiece {
+	background-image: url("../images/white.png");
+}
+
+
 /*
 
 .alphabetUsed {

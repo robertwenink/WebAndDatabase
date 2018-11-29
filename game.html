@@ -1,72 +1,42 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Balloons: a two player word game</title>
+        <title>Draughts!</title>
         <link rel="stylesheet" href="stylesheets/game.css">
     </head>
     <body>
         <main>
-            <section id="board">
-				<div id="tilescontainer">
-					<div id="tiles">
-						<script>
-						var i =1;
-						text="";
-						for (var j = 0; j < 8; j++) { 
-							if(j%2==0){
-								text += '</div><div class="whitetile">';
-							}
-							
-							text += '</div><div id='+ i +' class="darktile">';
-							
-							for (var k=0; k<3; k++){
-								text += '</div><div class="whitetile"></div><div id='+ i +' class="darktile">';
-							}
-							
-							if(j%2==1){
-								text += '</div><div class="whitetile">';
-							}
-							
-							i++;
-						}
-						document.getElementById('tiles').innerHTML = text;
-						</script>
-					</div>
-				</div>
-                
+			<section id="game">
+				<div id="scoreOpponent">
 				
-            </section>
-
-            <section id="game">
-                <div id="word">
-                    <span id="hiddenWord"></span>
                 </div>
-                <div id="balloons">
-
+                <div id="scorePlayer">
+				
                 </div>
                 <div id="status">
                     <span id="statusbar"></span>
                 </div>
             </section>
+		
+            <section id="board">
+				<div id="tilescontainer">
+					<div id="tiles">
+						
+					</div>
+				</div>
+                
+				
+            </section>
+			
+            
         </main>
-        <!-- This import is very far from optimal 
-            (but at easy to implement): 
-             every time the page is loaded, 
-             the English dictionary is loaded;
-             a better solution would be LocalStorage
-        -->
-        <script src="data/english.js"></script>
 
         <!-- In general, in a production environment, 
              all files would be compressed into a single one
              to avoid multiple HTTP requests.
              Automatic tools are available for this step.
         -->
-        <script src="javascripts/config.js"></script> 
-        <script src="javascripts/statuses.js"></script>
-        <script src="javascripts/messages.js"></script>
-        <script src="javascripts/alphabet.js"></script>
-        <script src="javascripts/ui-right.js"></script>
-        <script src="javascripts/interactions.js"></script> <!-- browser parses the code from top to bottom, by now the DOM is built -->
+        <script src="javascripts/buildenv.js"></script> 
+         <!-- browser parses the code from top to bottom, by now the DOM is built -->
     </body>
 </html>
