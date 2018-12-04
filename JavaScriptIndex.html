@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <titel>learning JavaScript</titel>
+        <link rel="stylesheet" href="JavaScriptStyle.css" />
+
+    </head>
+    <body>
+        <div class="header">
+            <h1 id="heading">learning JavaScript</h1>
+            <p>with me</p>
+        </div>
+        <div class="container">
+            <!-- <script>
+                var number1 = 35;
+                var colors = ['red', 'blue'];
+                var numbers = [4,3,2,23,12];
+                alert(number1);  
+                for(var i = 0; i < 10; i++) {
+                    console.log('hello')
+                }  
+                var i = 0;
+                while (i < 10) {
+                    console.log(i);
+                    i++;
+                }
+                numbers.forEach(function(number){
+                    console.log(number);
+                })
+            </script> -->
+            <h1 id="time"></h1>
+            <button onclick="showDate(this)">Show Date</button>
+        </div>
+        <script>
+        function changeText(id) {
+            var heading = document.getElementByID('heading');
+            heading.innerHTML = 'You Clicked!';
+        }
+        function showDate(){
+            var time = document.getElementById('time');
+            time.innerHTML = Date();
+        }
+        </script>
+    </body>
+</html>
