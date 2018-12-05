@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Draughts!</title>
+        <link rel="stylesheet" href="stylesheets/game.css">
+    </head>
+    <body>
+        <main>
+			<section id="game">
+				<div id="scoreOpponent">
+				
+                </div>
+                <div id="scorePlayer">
+				
+                </div>
+                <div id="status">
+                    <span id="statusbar"></span>
+                </div>
+            </section>
+		
+            <section id="board">
+				<div id="tilescontainer">
+					<div id="tiles">
+						
+					</div>
+				</div>
+                
+				
+            </section>
+			
+            
+        </main>
+
+        <!-- In general, in a production environment, 
+             all files would be compressed into a single one
+             to avoid multiple HTTP requests.
+             Automatic tools are available for this step.
+        -->
+        <script src="javascripts/buildenv.js"></script> 
+		<script src="javascripts/stepselect.js"></script> 
+         <!-- browser parses the code from top to bottom, by now the DOM is built -->
+    </body>
+</html>
