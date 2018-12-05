@@ -11,6 +11,7 @@ main {
 	width: 100vh;
 	height: 100vh;
 	display: inline-block;
+	margin-left:-4px;
 }
 
 #tilescontainer {
@@ -50,7 +51,7 @@ main {
 
 #game {
 	display: inline-block;
-	width: calc(50vw - 50vh);
+	width: calc(50vw - 50vh);/*(100vw -100vh)/2*/
 	height: 100vh;
 	padding-top: 0;
 	vertical-align:top;
@@ -93,6 +94,7 @@ main {
 	height: 100%;
 	width: 100%;
 	transition: 0.1s ease-in-out;
+	box-sizing: border-box;
 }
 
 .blackPiece {
@@ -104,127 +106,29 @@ main {
 }
 
 #status{
-	position: fixed;
+	position:absolute;
 	width: 100%;
 	height: 100%;
-	background-color: black;
-	opacity: 0.5;
+	background-color: rgba(0,0,0,0.5);
+	top: 0;
+	left:0;
+	display:none;
 	z-index:  9;
-	display: none;
 }
 
 #statusbar {
 	background-color: #1aaaad;
 	color: white;
 	display: none;
-	font-size: 45px;
+	font-size: 10vh;
 	font-weight: 900;
-	height:0.25vh;
+	height:25vh;
+	width: 35vh;
 	border-radius: 10%;
-	left: 0px;
-	letter-spacing: 1px;
-	margin : 0 auto;
-	padding-top: 30px;
-	overflow: hidden;
-	position: absolute;
-	right: 0px;
+	letter-spacing: 0.1vh;
+	margin: 37.5vh auto;
+	position: relative;
 	text-align: center;
-	top: 15%;
-	width: 0.25vw;
 	z-index: 10;
 	font-family: Calibri, Candara;
-	transition: 5s ease-in-out;
-}
-/*
-
-.alphabetUsed {
-    border: 2px solid #bbb;
-    background-color: #ccc;
-    box-shadow: none;
-}
-
-.alphabetUsed:hover {
-    box-shadow: none;
-}
-
-/*
-#word {
-    float: left;
-    width: 50%;
-    height: 50%;
-    background-color: #AAA;
-
-    font-size: 500%;
-    color: var(--main-red);
-    text-align: center;
-}
-
-#hiddenWord {
-    font-family:monaco,Bitstream Vera Sans Mono,monospace;
-    display: inline-block;
-    vertical-align: middle;
-    line-height: 500%;
-}
-
-
-#status {
-    float: left;
-    width: 50%;
-    height: 5%;
-    background-color: #222;
-    font-family:monaco,Bitstream Vera Sans Mono,monospace;
-    color: var(--status-red);
-    font-size: 75%;
-    vertical-align: middle;
-}
-
-#statusbar {
-    display:inline-block; 
-    vertical-align: middle; 
-    padding: 15px;
-    margin: 0 auto;
-    overflow: hidden;
-    white-space: nowrap;
-    animation: typing 5s steps(40, end);
-    letter-spacing: .1em;
-}
-
-/*
-    Typing/blinking inspired by: https://css-tricks.com/books/volume-i/animate-text-like-typewriter/
- */
-/*
-#statusbar::after {
-    content: " _";
-    animation: blinking 0.9s steps(3, start) infinite;
-}
-
-@keyframes typing {
-    from { width: 0 }
-    to { width: 100% }
-  }
-
-@keyframes blinking {
-    to {
-      visibility: hidden;
-    }
-}
-
-#balloons {
-    float: left;
-    width: 50%;
-    height: 45%;
-    background-color: #eee;
-}
-
-.balloon {
-    width: 10vw;
-    height: 10vw;
-    margin: 10px;
-    border: 0px;
-    transition: width 2s, height 2s, transform 2s;
-}
-
-.balloonGone {
-    width: 0vw;
-    height: 0vw;
 }
