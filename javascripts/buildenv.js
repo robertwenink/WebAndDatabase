@@ -346,6 +346,11 @@ function switchturns(){
 	removeActiveCss();
 	var possiblemoves=[];
 	var current_checker=undefined;
+	var span=document.getElementById("turn");
+	
+	span.innerHTML="Turn: "+ turn;
+	console.log("current color: "+turn +"span: "+span);
+	span.style.color=""+turn;
 }
 
 function selectPiecesCss(currenttile,possiblemoves){
