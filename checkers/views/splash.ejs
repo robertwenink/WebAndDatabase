@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Draughts!</title>
+        <link rel="stylesheet" href="stylesheets/splash.css">
+    </head>
+    <body>
+        <main>
+            <section id="left">
+                <div id="decoration-top">
+                    <span class="square"></span>
+                    <span class="square"></span>
+                    <span class="square"></span>
+                    <span class="square"></span>
+                    <span class="square"></span>
+                    <span class="square"></span>
+                    <span class="square"></span>
+                    <span class="square"></span>
+                    <span class="square"></span>
+                </div>
+                <h1>Draughts</h1>
+                <h2>A two player game</h2>
+                <!-- Hier ook een .ejs bestand van maken en hier dan dezelfde statistieken weergeven?-->
+                <h3><%= gamesInitialized %> <%if (gamesInitialized != 1) { %> games <% } else { %> game <% } %> initialized, 
+                    <%= gamesCompleted %> completed,
+                    <%= gamesAborted %> aborted.
+                </h3>
+            </section>
+            <section id="right">
+                <!-- Upon entering your web application's URL, a splash screen is shown that allows 
+				a user to see some statistics of the game 
+				(how many games are currently ongoing, how many users have started a game, etc. 
+				- pick three statistics you want to report), 
+				- a brief description of how-to-play on your platform and a 
+				- Play button (or something to that effect).-->
+				<div id="explanation">
+					<h4>Goal</h4>
+					You have 12 game pieces. <br>
+					Your goal is to immobilize all 12 pieces of your opponent, which either means all pieces have been captured or the remaining pieces cannot make a move anymore. <br>
+					
+					<h4>Rules</h4>
+					<ul>
+						<li>Moving is only done forward and diagonally by one tile over the dark tiles.</li> <br>
+						<li>Capturing can be done by diagonally hopping over an oponent`s piece, however the space behind it must of course be vacant.</li> <br>
+						<li>If one is able to capture, it is obliged. This counts for multiple captures with one piece as well. </li><br>
+						<li>If a piece reaches the last line of the opponent`s side, it is transformed in a King, and can now move and capture backwards as well!</li> <br>
+						<li>If you are black or white is random. White begins.</li> <br>
+					</ul>
+				</div>
+
+            </section>
+            <section id="balloons">
+                    <form action="/play" method="get">
+                            <button type="submit">PLAY</button>
+                    </form>
+            </section>
+        </main>
+    </body>
+</html>
