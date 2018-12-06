@@ -1,3 +1,4 @@
+//function GameState()
 var tiles = [];
 var w_checker = [];
 var b_checker = [];
@@ -7,6 +8,7 @@ var leftUp=false, leftDown=false, rightUp=false, rightDown=false;
 var turn="white";
 var whiteLeft=12 ,blackLeft=12 ;
 var mustAttack=false; //if a piece has to attack, makeMOve must have different behaviour
+var attackPossible=false;
 
 var playtile = function(tile){
 	this.id = tile;
@@ -351,6 +353,8 @@ function switchturns(){
 	span.innerHTML="Turn: "+ turn;
 	console.log("current color: "+turn +"span: "+span);
 	span.style.color=""+turn;
+	
+	
 }
 
 function selectPiecesCss(currenttile,possiblemoves){

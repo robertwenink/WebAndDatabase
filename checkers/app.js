@@ -6,7 +6,7 @@ var indexRouter = require("./routes/index");
 var messages = require("./public/javascripts/messages");
 
 var gameStatus = require("./statTracker");
-var Game = require("./buildenv");
+var Game = require("./public/javascripts/buildenv");
 
 var port = process.argv[2];
 var app = express();
