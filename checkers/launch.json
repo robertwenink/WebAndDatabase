@@ -1,0 +1,15 @@
+{
+    "version": "0.1.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Program",
+            "program": "$/Users/berend-jan/OneDrive/TU Delft/Web & Database Technology/WebAndDatabase/checkers/app.js",
+            "cwd": "$/Users/berend-jan/OneDrive/TU Delft/Web & Database Technology/WebAndDatabase/checkers",
+            "args": [
+                "3000"
+            ]
+        }
+    ]
+}
