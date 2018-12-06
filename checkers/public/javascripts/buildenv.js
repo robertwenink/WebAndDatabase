@@ -1,5 +1,7 @@
 function GameState(socket){
 	this.playerType = null;
+	this.blackWin=null;
+	this.whiteWin=null;
 	this.getPlayerType = function () {
         return this.playerType;
     };
@@ -396,9 +398,11 @@ function GameState(socket){
 		
 		if(whiteLeft == 0){
 			statusbar.innerHTML = "Black wins";
+			this.blackWin=true;
 		}
 		else{
 			statusbar.innerHTML = "White wins";
+			this.whiteWin=true;
 		}
 		//socket.close();
 	}
@@ -429,16 +433,13 @@ function GameState(socket){
             //if player type is A, (1) pick a word, and (2) sent it to the server
             if (gs.getPlayerType() == "WHITE") {
 
-                let outgoingMsg = Messages.O_TARGET_WORD;
-                outgoingMsg.data = res;
-                socket.send(JSON.stringify(outgoingMsg));
             }
             else {
-                sb.setStatus(Status["player2IntroNoTargetYet"]);   
+                //sb.setStatus(Status["player2IntroNoTargetYet"]);   
             }
         }
 
-        if (incomingMsg.type == Message.T_MADE_A_MOVE){
+        if (incomingMsg.type == Messages.T_MADE_A_MOVE){
 			if(incomingMsg.data=="WHITE"){
 				gs.setPlayerType()="BLACK";
 			}
@@ -454,8 +455,8 @@ function GameState(socket){
     
     //server sends a close event only if the game was aborted from some side
     socket.onclose = function(){
-        if(gs.whoWon()==null){
-            sb.setStatus(Status["aborted"]);
+        if(gs.blackWin==null||gs.whiteWin==null){
+            console.log("aborted");
         }
     };
 

@@ -83,11 +83,12 @@ game.prototype.setStatus = function (w) {
 };
 
 game.prototype.hasTwoConnectedPlayers = function () {
+	console.log("Two players!");
     return (this.gameState == "2 JOINT");
 };
 
 game.prototype.addPlayer = function (p) {
-
+	console.log("Player added!");
     console.assert(p instanceof Object, "%s: Expecting an object (WebSocket), got a %s", arguments.callee.name, typeof p);
 
     if (this.gameState != "0 JOINT" && this.gameState != "1 JOINT") {

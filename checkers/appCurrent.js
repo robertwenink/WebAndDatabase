@@ -100,7 +100,7 @@ wss.on("connection", function connection(ws) {
              * if player B is already available, send message to B    W
              */
             if (oMsg.type == messages.T_TARGET_WORD) {                      //if message is Made_A_Move and gameStatus 4 (player white's turn)
-                gameObj.setWord(oMsg.data);                                 //relay message to player black and change gameStatus to 5
+                //gameObj.setWord(oMsg.data);                                 //relay message to player black and change gameStatus to 5
 
                 if(gameObj.hasTwoConnectedPlayers()){
                     gameObj.playerB.send(message); 
