@@ -42,5 +42,4 @@ function StatusBar(){
         colorStart += 111;
         div.appendChild(b);
     }
-}
-
+}*/
