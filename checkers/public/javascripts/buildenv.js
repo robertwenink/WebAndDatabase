@@ -1,4 +1,13 @@
-function GameState(){
+function GameState(socket){
+	this.playerType = null;
+	this.getPlayerType = function () {
+        return this.playerType;
+    };
+
+    this.setPlayerType = function (p) {
+        console.assert(typeof p == "string", "%s: Expecting a string, got a %s", arguments.callee.name, typeof p);
+        this.playerType = p;
+    };
 	var tiles = [];
 	var w_checker = [];
 	var b_checker = [];
@@ -354,7 +363,9 @@ function GameState(){
 		console.log("current color: "+turn +"span: "+span);
 		span.style.color=""+turn;
 		
-		
+		let outgoingMsg = Messages.O_MADE_A_MOVE;
+        outgoingMsg.data = this.playertype;
+        socket.send(JSON.stringify(outgoingMsg));
 	}
 
 	function selectPiecesCss(currenttile,possiblemoves){
@@ -389,6 +400,7 @@ function GameState(){
 		else{
 			statusbar.innerHTML = "White wins";
 		}
+		//socket.close();
 	}
 
 	function playSound(sound){
@@ -401,10 +413,54 @@ function GameState(){
 }
 
 
-	
 (function setup(){
+	var socket = new WebSocket(Setup.WEB_SOCKET_URL);
+	var gs = new GameState(socket);
 	
-	var gs = new GameState();
+	socket.onmessage = function (event) {
+
+        let incomingMsg = JSON.parse(event.data);
+ 
+        //set player type
+        if (incomingMsg.type == Messages.T_PLAYER_TYPE) { 
+            
+            gs.setPlayerType( incomingMsg.data );//should be "WHITE" or "BLACK"
+
+            //if player type is A, (1) pick a word, and (2) sent it to the server
+            if (gs.getPlayerType() == "WHITE") {
+
+                let outgoingMsg = Messages.O_TARGET_WORD;
+                outgoingMsg.data = res;
+                socket.send(JSON.stringify(outgoingMsg));
+            }
+            else {
+                sb.setStatus(Status["player2IntroNoTargetYet"]);   
+            }
+        }
+
+        if (incomingMsg.type == Message.T_MADE_A_MOVE){
+			if(incomingMsg.data=="WHITE"){
+				gs.setPlayerType()="BLACK";
+			}
+			else{
+				gs.setPlayerType()="WHITE";
+			}
+		}
+    };
+
+    socket.onopen = function(){
+        socket.send("{}");
+    };
+    
+    //server sends a close event only if the game was aborted from some side
+    socket.onclose = function(){
+        if(gs.whoWon()==null){
+            sb.setStatus(Status["aborted"]);
+        }
+    };
+
+    socket.onerror = function(){  
+    };
 })();
 //move("black6",this.tiles[19]);
 //move("black9",this.tiles[18]);

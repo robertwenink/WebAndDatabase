@@ -14,10 +14,10 @@ game.prototype.transitionStates["0 JOINT"] = 0;
 game.prototype.transitionStates["1 JOINT"] = 1;
 game.prototype.transitionStates["2 JOINT"] = 2;
 game.prototype.transitionStates["TURN WHITE"] = 3;
-game.prototype.transitionStates["TURN BLACK"] = 4
-game.prototype.transitionStates["WHITE"] = 4; //WHITE won
-game.prototype.transitionStates["BLACK"] = 5; //BLACK won
-game.prototype.transitionStates["ABORTED"] = 6;
+game.prototype.transitionStates["TURN BLACK"] = 4;
+game.prototype.transitionStates["WHITE"] = 5; //WHITE won
+game.prototype.transitionStates["BLACK"] = 6; //BLACK won
+game.prototype.transitionStates["ABORTED"] = 7;
 
 /*
  * Not all game states can be transformed into each other;
@@ -80,26 +80,6 @@ game.prototype.setStatus = function (w) {
     else {
         return new Error("Impossible status change from %s to %s", this.gameState, w);
     }
-};
-
-//THIS FUNCTION (SETWORD) CAN BE REMOVED
-
-game.prototype.setWord = function (w) {
-
-    console.assert(typeof w == "string", "%s: Expecting a string, got a %s", arguments.callee.name, typeof w);
-
-    //two possible options for the current game state:
-    //1 JOINT, 2 JOINT
-    if (this.gameState != "1 JOINT" && this.gameState != "2 JOINT") {
-        return new Error("Trying to set word, but game status is %s", this.gameState);
-    }
-    this.wordToGuess = w;
-};
-
-//THIS FUNCTION (GETWORD) CAN BE REMOVED
-
-game.prototype.getWord = function(){
-    return this.wordToGuess;
 };
 
 game.prototype.hasTwoConnectedPlayers = function () {
