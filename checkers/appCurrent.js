@@ -65,11 +65,11 @@ wss.on("connection", function connection(ws) {
     /*
      * client B receives the target word (if already available)
      */ 
-    /*if(playerType == "BLACK" && currentGame.getWord()!=null){
+    if(playerType == "BLACK" && currentGame.getWord()!=null){
         let msg = messages.O_TARGET_WORD;
         msg.data = currentGame.getWord();
         con.send(JSON.stringify(msg));
-    }*/
+    }
 
     /*
      * once we have two players, there is no way back; 
@@ -86,49 +86,49 @@ wss.on("connection", function connection(ws) {
      *  2. determine the opposing player OP
      *  3. send the message to OP 
      */ 
-    con.on("message", function incoming(message) {    
+    con.on("message", function incoming(message) {
 
         let oMsg = JSON.parse(message);
  
         let gameObj = websockets[con.id];
-        let isPlayerA = (gameObj.playerA == con) ? true : false;          //Change to isPlayerWhite
+        let isPlayerA = (gameObj.playerA == con) ? true : false;
 
-        if (isPlayerA) {                                                   //isPlayerWhite 
+        if (isPlayerA) {
             
             /*
              * player A cannot do a lot, just send the target word;
-             * if player B is already available, send message to B    W
+             * if player B is already available, send message to B
              */
-            if (oMsg.type == messages.T_TARGET_WORD) {                      //if message is Made_A_Move and gameStatus 4 (player white's turn)
-                gameObj.setWord(oMsg.data);                                 //relay message to player black and change gameStatus to 5
+            if (oMsg.type == messages.T_TARGET_WORD) {
+                gameObj.setWord(oMsg.data);
 
                 if(gameObj.hasTwoConnectedPlayers()){
                     gameObj.playerB.send(message); 
                 }                
             }
         }
-        else {                                                              // Vice Versa
+        else {
             /*
              * player B can make a guess; 
              * this guess is forwarded to A
              */ 
-            if(oMsg.type == messages.T_MAKE_A_GUESS){                        //if message is Made_A_Move and gameStatus 5 (player black's turn)
-                gameObj.playerA.send(message);                               //relay message to player black and change gameStatus to 5
+            if(oMsg.type == messages.T_MAKE_A_GUESS){
+                gameObj.playerA.send(message);
                 gameObj.setStatus("CHAR GUESSED");
             }
 
             /*
              * player B can state who won/lost
              */ 
-            if( oMsg.type == messages.T_GAME_WON_BY){                       // If message is GAME_OVER whoever send it won.
-                gameObj.setStatus(oMsg.data);                               // set Status to 6 (white won) or 7 (black won)
+            if( oMsg.type == messages.T_GAME_WON_BY){
+                gameObj.setStatus(oMsg.data);
                 //game was won by somebody, update statistics
                 gameStatus.gamesCompleted++;
             }            
-        }                                                                   // buildenv should incl a choice stop depending on game status 4 or 5.
+        }
     });
 
-    con.on("close", function (code) { 
+    con.on("close", function (code) {
         
         /*
          * code 1001 means almost always closing initiated by the client;
