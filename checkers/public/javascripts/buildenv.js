@@ -1,18 +1,50 @@
-
+//function GameState()
 var tiles = [];
 var w_checker = [];
 var b_checker = [];
 var possiblemoves=[];
+var current_checker;
 var leftUp=false, leftDown=false, rightUp=false, rightDown=false;
+var turn="white";
+var whiteLeft=12 ,blackLeft=12 ;
+var mustAttack=false; //if a piece has to attack, makeMOve must have different behaviour
+var attackPossible=false;
 
 var playtile = function(tile){
 	this.id = tile;
 	this.htmlid=tile.id;
 	this.occupied = false;//is the tile occupied?
 	this.pieceId = undefined;//which piece is on it?
-	//this.id.onclick = function  () {
-	//	move(this.pieceId,tiles[15]);	
-	//}
+	this.id.onclick = function  () {
+		makeMove(tile.id);	
+	}
+}
+
+function makeMove(tilehtmlid) {
+	console.log(tilehtmlid);
+	for(let i=0;i<possiblemoves.length;i++){
+		if(possiblemoves[i][0]==tiles[tilehtmlid]){
+			move(current_checker.htmlid,tiles[tilehtmlid]);
+			if(possiblemoves[i][1]!=undefined){
+				updateScore(possiblemoves[i][1].pieceId,turn);
+				var currenttile=possiblemoves[i][0];
+				possiblemoves=[];
+				mustAttack=true;
+				showMoves(currenttile.pieceId);
+				if(possiblemoves.length==0){
+					switchturns();
+					mustAttack=false;
+				}
+			}
+			else{
+				switchturns();
+				possiblemoves=[];
+			}
+		}
+	}
+	if(tiles[tilehtmlid].pieceId!=undefined){
+			showMoves(tiles[tilehtmlid].pieceId);
+	}
 }
 
 function buildBoard(){
@@ -51,22 +83,20 @@ var checker = function(piece,color,tile) {
 	this.tileId = tile;
 	this.alive = true;
 	this.attack = false;
-	
-	this.id.onclick = function  () {
-		showMoves(piece.id);
-		//move(piece.id,tiles[15])
-	}
 }
 
 checker.prototype.checkIfKing = function () {
 	x=this.tileId.match(/\d+/)[0];
-	if(x >= 29 && x <= 32 && !this.king &&this.color == "white"){
+	console.log("x:"+x);
+	if(x >= 29 && x <= 32 && !this.king &&this.color == "black"){
 		this.king = true;
-		this.id.style.border = "4px solid #FFFF00";
+		this.id.style.border = "6px solid grey";
+		this.id.style.borderRadius = "50%";
 	}
-	if(x >= 1 && x <= 4 && !this.king &&this.color == "black"){
+	if(x >= 1 && x <= 4 && !this.king &&this.color == "white"){
 		this.king = true;
-		this.id.style.border = "4px solid #FFFF00";
+		this.id.style.border = "6px solid yellow";
+		this.id.style.borderRadius = "50%";
 	}
 }
 
@@ -113,7 +143,6 @@ function placeInitPieces(BW,PlayerOrOpponent){
 		
 		j++;
 	}
-	console.log(w_checker)
 }
 
 function updateScore(idpiece,PlayerOrOpponent){
@@ -123,7 +152,8 @@ function updateScore(idpiece,PlayerOrOpponent){
 	scoreTile.className = "scoreTile";
 	scoretileid="score"+idpiece;
 	
-	if(PlayerOrOpponent==0){
+	//if(PlayerOrOpponent==0){
+	if(PlayerOrOpponent.indexOf("white")>=0){
 		id="scoreOpponent";
 	}
 	else{
@@ -136,14 +166,26 @@ function updateScore(idpiece,PlayerOrOpponent){
 	document.getElementById(scoretileid).appendChild(document.getElementById(idpiece));
 	
 	//update javascript
-	current_checker=checkBlackOrWhite(idpiece)[idpiece.match(/\d+/)[0]];
-	console.log(current_checker);
+	var deletechecker=checkBlackOrWhite(idpiece)[idpiece.match(/\d+/)[0]];
+	console.log("Score wordt geupdate met:"+deletechecker.tileId);
 	
-	tiles[current_checker.tileId].occupied=false;
-	tiles[current_checker.tileId].pieceId=undefined;
+	tiles[deletechecker.tileId].occupied=false;
+	tiles[deletechecker.tileId].pieceId=undefined;
 	
-	current_checker.alive=false;
-	current_checker.tileId=undefined;
+	deletechecker.alive=false;
+	deletechecker.tileId=undefined;
+	
+	if(deletechecker.color=="white"){
+		whiteLeft-=1;
+	}
+	else{
+		blackLeft-=1;
+	}
+	
+	if(blackLeft==0||whiteLeft==0){
+		endGame();
+	}
+	
 }
 
 function checkBlackOrWhite(idpiece){
@@ -153,50 +195,81 @@ function checkBlackOrWhite(idpiece){
 
 function showMoves (piecehtmlid) {
 	leftUp=false, leftDown=false, rightUp=false, rightDown=false;
-
-	current_checker=checkBlackOrWhite(piecehtmlid)[piecehtmlid.match(/\d+/)[0]];
-	var currenttile=tiles[current_checker.tileId];
-	
-	if(current_checker.king){
-		//dan mag hij alle kanten op bewegen
-		leftUp=true;leftDown=true;rightUp=true;rigthDown=true;
-	}
-	if(current_checker.color=="white"){
-		leftUp=true;
-		rightUp=true;
-	}	
-	else{
-		leftDown=true;
-		rightDown=true;
-	}
-	//console.log("booleans"+leftUp + leftDown + rightUp + rightDown)
-	tileid=parseInt(currenttile.htmlid);
-	
-	var steps=defineStep(tileid);
-	//console.log(steps)
-	possiblemoves=[];
-	for(let i=0;i<=3;i++){
-		checkStep(tileid,steps[i],current_checker);
+	if(mustAttack===false){//then selecting a new checker is forbidden
+		current_checker=checkBlackOrWhite(piecehtmlid)[piecehtmlid.match(/\d+/)[0]];
 	}
 	
-	for(let i=0;i<possiblemoves.length;i++){
-		console.log("Tile beschikbaar: "+possiblemoves[i][0].htmlid)
+	if(current_checker.color==turn){	
+		var currenttile=tiles[current_checker.tileId];
+		
+		if(current_checker.king){
+			//dan mag hij alle kanten op bewegen
+			leftUp=true;leftDown=true;rightUp=true;rightDown=true;
+		}
+		if(current_checker.color=="white"){
+			leftUp=true;
+			rightUp=true;
+		}	
+		else{
+			leftDown=true;
+			rightDown=true;
+		}
+		tileid=parseInt(currenttile.htmlid);
+		
+		var steps=defineStep(tileid);
+		
+		possiblemoves=[];
+		for(let i=0;i<=3;i++){
+			checkStep(tileid,steps[i],current_checker,i);
+		}
+		
+		onlyAttackPossibleMoves();
+		
+		//controle
+		console.log("currenttile"+currenttile.htmlid);
+		for(let i=0;i<possiblemoves.length;i++){
+			console.log("Tile beschikbaar: "+possiblemoves[i][0].htmlid)
+		}
+		
+		
+		selectPiecesCss(currenttile,possiblemoves);
 	}
 }
 
-function checkStep(tileid,step,current_checker){
+function onlyAttackPossibleMoves(){
+	var newmoves=[];
+	
+	for(let i=0;i<possiblemoves.length;i++){
+		if(possiblemoves[i][1]!=undefined){
+			console.log("there is an attack move!");
+			newmoves.push([possiblemoves[i][0],possiblemoves[i][1]]);
+		}
+	}
+	if(newmoves.length!=0||mustAttack===true){
+		possiblemoves=[];
+		possiblemoves=newmoves;
+	}
+}
+
+function checkStep(tileid,step,current_checker,directionindex){
 	id=tileid+step;
 	var targettile=tiles[id];
-	console.log(targettile);
+	
 	if(targettile.occupied){
 		var occupyingpiece=checkBlackOrWhite(targettile.pieceId)[targettile.pieceId.match(/\d+/)[0]];
 		
 		if(current_checker.color!=occupyingpiece.color){//attack might be possible.
-			possiblemoves.push([targettile,targettile]);
+			var steps=defineStep(id);
+			if(steps[directionindex]!=0){
+				var othertile=tiles[id+steps[directionindex]];
+				if(othertile.occupied===false){
+					possiblemoves.push([othertile,targettile]);
+				}
+			}
 		}
 	}
 	else{
-		possiblemoves.push([targettile,undefined]);//possible step, attack possible or not (0)
+		possiblemoves.push([targettile,undefined]);//possible step, attack possible on tile ...
 	}
 }
 
@@ -210,8 +283,8 @@ function defineStep (tileid){
 		rightDown=false;
 	}
 	if([1,2,3,4].includes(tileid)){
-		leftDown=false;
-		rightDown=false;
+		leftUp=false;
+		rightUp=false;
 	}
 	if([29,30,31,32].includes(tileid)){
 		leftDown=false;
@@ -243,44 +316,110 @@ function defineStep (tileid){
 	return directionArray;
 }
 
-function selectMove(piecehtmlid) {
-	
-}
-
 function move(piecehtmlid,totile) {
-	
 	if(totile.occupied===false){
-		console.log(piecehtmlid)
-		current_checker=checkBlackOrWhite(piecehtmlid)[piecehtmlid.match(/\d+/)[0]];
+		move_checker=checkBlackOrWhite(piecehtmlid)[piecehtmlid.match(/\d+/)[0]];
 		
-		console.log(piecehtmlid+"<- from, to -> "+ totile.htmlid);
-		document.getElementById(totile.htmlid).appendChild(document.getElementById(current_checker.htmlid));
+		console.log(piecehtmlid+" from tile with id: "+move_checker.tileId+", to -> "+ totile.htmlid);
+		document.getElementById(totile.htmlid).appendChild(document.getElementById(move_checker.htmlid));
 		
 				
 		//update origin and destination tile 
-		console.log(current_checker.tileId)
-		tiles[current_checker.tileId].occupied=false;
-		tiles[current_checker.tileId].pieceId=undefined;
+
+		tiles[move_checker.tileId].occupied=false;
+		tiles[move_checker.tileId].pieceId=undefined;
 		
 		totile.occupied=true;
 		totile.pieceId=piecehtmlid;
 		
-		current_checker.tileId=totile;
+		move_checker.tileId=totile.htmlid;
+		move_checker.checkIfKing();
+	}
+	
+}
+
+function switchturns(){
+	if(turn=="white"){
+		turn="black";
+	}
+	else if(turn=="black"){
+		turn="white";
+	}
+	removeActiveCss();
+	var possiblemoves=[];
+	var current_checker=undefined;
+	var span=document.getElementById("turn");
+	
+	span.innerHTML="Turn: "+ turn;
+	console.log("current color: "+turn +"span: "+span);
+	span.style.color=""+turn;
+	
+	
+}
+
+function selectPiecesCss(currenttile,possiblemoves){
+	removeActiveCss();
+	
+	document.getElementById(currenttile.htmlid).className += " active";
+	for(let i=0;i<possiblemoves.length;i++){
+		document.getElementById(possiblemoves[i][0].htmlid).className += " active";
 	}
 }
 
+function removeActiveCss(){
+	//remove previous active
+	var current = document.getElementsByClassName("active");
+	while(current.length>0){
+		current = document.getElementsByClassName("active");
+		for(let i=0;i<current.length;i++){
+			current[i].className = current[i].className.replace(" active","");
+		}
+	}
+}
 
+function endGame(){
+	playSound(winSound);
+	document.getElementById('status').style.display = "block";
+	var statusbar=document.getElementById('statusbar');
+	statusbar.style.display = "block";
+	
+	if(whiteLeft == 0){
+		statusbar.innerHTML = "Black wins";
+	}
+	else{
+		statusbar.innerHTML = "White wins";
+	}
+}
+
+function playSound(sound){
+	if(sound) sound.play();
+}
 
 buildBoard();
 placeInitPieces(0,0);
 placeInitPieces(1,1);
-//updateScore("white1",0);
-//updateScore("white2",0);
-//updateScore("white3",0);
-//updateScore("white4",0);
-//updateScore("white5",0);
+
+//move("black6",tiles[19]);
+//move("black9",tiles[18]);
+//move("black5",tiles[9]);
+
+//move("white12",tiles[12]);
+
+
 //updateScore("black1",1);
 //updateScore("black2",1);
 //updateScore("black3",1);
 //updateScore("black4",1);
 //updateScore("black5",1);
+//updateScore("black6",1);
+//updateScore("black7",1);
+//updateScore("black8",1);
+//updateScore("black9",1);
+//updateScore("black10",1);
+//updateScore("black11",1);
+
+//updateScore("white1",0);
+//updateScore("white2",0);
+//updateScore("white3",0);
+//updateScore("white4",0);
+//updateScore("white5",0);
