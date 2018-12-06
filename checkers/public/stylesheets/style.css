@@ -1,8 +1,21 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+:root {
+  --main-red: #f4424b;
+  --status-red: #fd2130;
+}
+
+html, body, main, section {
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+
+html, body {
+	margin: 0; 
+	height: 100%; 
+	overflow: hidden;
 }
 
 a {
-  color: #00B7FF;
+  color: #aaa;
+  text-decoration: underline overline;
 }
