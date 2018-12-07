@@ -83,7 +83,7 @@ game.prototype.setStatus = function (w) {
 };
 
 game.prototype.hasTwoConnectedPlayers = function () {
-	console.log("Two players!");
+	//console.log("Two players!");                              //this doesnt mean it has two players, it just checks for it.
     return (this.gameState == "2 JOINT");
 };
 
@@ -101,6 +101,7 @@ game.prototype.addPlayer = function (p) {
     var error = this.setStatus("1 JOINT");
     if(error instanceof Error){
         this.setStatus("2 JOINT");
+        this.setStatus("TURN WHITE");
     }
 
     if (this.playerA == null) {

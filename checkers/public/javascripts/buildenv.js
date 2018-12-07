@@ -17,6 +17,7 @@ function GameState(socket){
 	var current_checker;
 	var leftUp=false, leftDown=false, rightUp=false, rightDown=false;
 	var turn="white";
+	var turnUpperCase = "WHITE";
 	var whiteLeft=12 ,blackLeft=12 ;
 	var mustAttack=false; //if a piece has to attack, makeMOve must have different behaviour
 	var attackPossible=false;
@@ -345,6 +346,14 @@ function GameState(socket){
 			
 			move_checker.tileId=totile.htmlid;
 			move_checker.checkIfKing();
+
+			// if (turnUpperCase == gs.getPlayerType()) {
+			// 	let outgoingMsg = Messages.O_MADE_A_MOVE; 
+			// 	outgoingMsg.data = this.playertype;
+			// 	outgoingMsg.pieceid = piecehtmlid;
+			// 	outgoingMsg.to = totile;
+			// 	socket.send(JSON.stringify(outgoingMsg));
+			// }
 		}
 		
 	}
@@ -352,9 +361,11 @@ function GameState(socket){
 	function switchturns(){
 		if(turn=="white"){
 			turn="black";
+			turnUpperCase="BLACK";
 		}
 		else if(turn=="black"){
 			turn="white";
+			turnUpperCase="WHITE";
 		}
 		removeActiveCss();
 		var possiblemoves=[];
@@ -366,7 +377,8 @@ function GameState(socket){
 		span.style.color=""+turn;
 		
 		let outgoingMsg = Messages.O_MADE_A_MOVE;
-        outgoingMsg.data = this.playertype;
+		outgoingMsg.data = this.playertype;
+		outgoingMsg.pieceid = piecehtmlid;
         socket.send(JSON.stringify(outgoingMsg));
 	}
 
@@ -430,7 +442,7 @@ function GameState(socket){
             
             gs.setPlayerType( incomingMsg.data );//should be "WHITE" or "BLACK"
 
-            //if player type is WHITE, DO nothing
+            //if player type is WHITE, do nothing
             if (gs.getPlayerType() == "WHITE") {
 				
             }
@@ -439,23 +451,17 @@ function GameState(socket){
             }
         }
 
-        if (incomingMsg.type == Messages.T_YOUR_TURN && incomingMsg.data == gs.getPlayerType){
-			//THIS MEANS THE PLAYER IS THE PLAYER WHO IS NOW ON TURN
+        if (incomingMsg.type == Messages.T_MADE_A_MOVE){
+			//Opponents move
+			// 1: move the opponents piece
+			// 2: switch turns
 			
-			//gs.enableTiles();
-			
-			//while (movemade < 0) {
-				
-			//}
-			
-
-			// if(incomingMsg.data=="WHITE"){
-			// 	gs.setPlayerType()="WHITE";
-			// }
-			// else{
-			// 	gs.setPlayerType()="BLACK";
-			// }
-
+			let pieceIdHtml = incomingMsg.pieceid;
+			console.log("Opponents piece that moved: %s" , pieceIdHtml);
+			let toTileNumber = incomingMsg.to;
+			console.log("Moved to tilenumner: %s", toTileNumber);
+			move(pieceIdHtml,toTileNumber);
+			switchturns();
 
 		}
     };
