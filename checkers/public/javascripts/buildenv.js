@@ -18,15 +18,15 @@ function GameState(socket){
 	var leftUp=false, leftDown=false, rightUp=false, rightDown=false;
 	var turn="WHITE";
 	var whiteLeft=12 ,blackLeft=12 ;
-	var mustAttack=false; //if a piece has to attack, makeMOve must have different behaviour
+	var mustAttack=false; //if a piece has to attack, makeMove must have different behaviour
 	var attackPossible=false;
 
-	this.disableTiles = function() {
-															//disable board for player [playerType]						(!)(!)(!) LAST TO FIX
-	}
-	this.enableTiles = function() {
-															//enable board for player [playerType]						(!)(!)(!) LAST TO FIX
-	}
+	// this.disableTiles = function() {
+	// 														//disable board for player [playerType]						(!)(!)(!) LAST TO FIX
+	// }
+	// this.enableTiles = function() {
+	// 														//enable board for player [playerType]						(!)(!)(!) LAST TO FIX
+	// }
 
 	var playtile = function(tile){
 		this.id = tile;
@@ -370,12 +370,12 @@ function GameState(socket){
 		else if(turn=="BLACK"){
 			turn="WHITE";
 		}
-		if (turn == gs.getPlayerType()) {
-			enableTiles();
-		}
-		else {
-			disableTiles();
-		}
+		// if (turn == gs.getPlayerType()) {
+		// 	enableTiles();
+		// }
+		// else {
+		// 	disableTiles();
+		// }
 		removeActiveCss();
 		var possiblemoves=[];
 		var current_checker=undefined;
@@ -452,10 +452,10 @@ function GameState(socket){
 
             //if player type is WHITE, do nothing
             if (gs.getPlayerType() == "WHITE") {
-				//gs.disableTiles;													//MISSING FORMULA
+				//gs.disableTiles();													//MISSING FORMULA
             }
             else {   //PLAYER IS BLACK AND THE GAME HAS JUST STARTED
-                gs.disableTiles();												//MISSING FORMULA
+                //gs.disableTiles();												//MISSING FORMULA
             }
         }
 

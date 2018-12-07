@@ -13,7 +13,7 @@ var app = express();
 
 //app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
-http.createServer(app).listen(port); //standerd file, not necessary in final version.
+http.createServer(app).listen(port); 
 /*app.get("/play", indexRouter);
 
 app.get("/", (req, res) => {

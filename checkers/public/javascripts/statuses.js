@@ -17,6 +17,6 @@
     //Status["guessed"] = "Player 2 guessed letter ";
     Status["aborted"] = "Your gaming partner is no longer available, game aborted. " + Status["playAgain"];
     Status["playerW_playerBturn"] = "It is player Black's turn!";
-    Status["playerW_playerWturn"] = "It is your turn!";
-    Status["playerB_playerBturn"] = "It is your turn!";
+   //  Status["playerW_playerWturn"] = "It is your turn!"; STATUSSES ARE EQUAL FOR BOTH PLAYERS
+   //  Status["playerB_playerBturn"] = "It is your turn!";
     Status["playerB_playerWturn"] = "It is player White's turn!";

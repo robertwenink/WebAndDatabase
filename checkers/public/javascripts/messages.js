@@ -42,7 +42,7 @@
     exports.T_YOUR_TURN = "YOUR-TURN";                              //DONT NEED THIS ANYMORE
     exports.O_YOUR_TURN = {                         
         type: exports.T_YOUR_TURN,
-        data: null,
+        data: null
     };
     //exports.S_YOUR_TURN does not exist, as we always need to fill the data property
 
