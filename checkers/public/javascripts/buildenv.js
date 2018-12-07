@@ -430,22 +430,33 @@ function GameState(socket){
             
             gs.setPlayerType( incomingMsg.data );//should be "WHITE" or "BLACK"
 
-            //if player type is A, (1) pick a word, and (2) sent it to the server
+            //if player type is WHITE, DO nothing
             if (gs.getPlayerType() == "WHITE") {
-
+				
             }
-            else {
-                //sb.setStatus(Status["player2IntroNoTargetYet"]);   
+            else {   //PLAYER IS BLACK AND THE GAME HAS JUST STARTED
+                //gs.disableTiles();												//MISSING FORMULA
             }
         }
 
-        if (incomingMsg.type == Messages.T_MADE_A_MOVE){
-			if(incomingMsg.data=="WHITE"){
-				gs.setPlayerType()="BLACK";
-			}
-			else{
-				gs.setPlayerType()="WHITE";
-			}
+        if (incomingMsg.type == Messages.T_YOUR_TURN && incomingMsg.data == gs.getPlayerType){
+			//THIS MEANS THE PLAYER IS THE PLAYER WHO IS NOW ON TURN
+			
+			//gs.enableTiles();
+			
+			//while (movemade < 0) {
+				
+			//}
+			
+
+			// if(incomingMsg.data=="WHITE"){
+			// 	gs.setPlayerType()="WHITE";
+			// }
+			// else{
+			// 	gs.setPlayerType()="BLACK";
+			// }
+
+
 		}
     };
 
