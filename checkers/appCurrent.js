@@ -96,21 +96,22 @@ wss.on("connection", function connection(ws) {
         if (isPlayerA) {                                                   //isPlayerWhite 
             
             /*
-             * player A can only make first move
-             * if player B is already available, send message to B    W
+             * player WHITE (A) can only make first move
+             * if player BLACK (B) is already available, send message to BLACK (B)    W
              */
             if (oMsg.type == messages.T_MADE_A_MOVE && gameObj.gameStatus == "TURN WHITE") {  
 
-                //if message is Made_A_Move and gameStatus 4 (player white's turn)
+                //if message is Made_A_Move type and gameStatus 4 (player white's turn)
                 //if player black has joined
                 //relay message to player black and change gameStatus to 5
 
                 if(gameObj.hasTwoConnectedPlayers()) {
-                    var outgoingMsg = Messages.O_YOUR_TURN;
-                    outgoingMsg.data = "BLACK";
-                    gameObj.playerB.send(JSON.stringify(outgoingMsg)); 
+                    // var outgoingMsg = Messages.O_YOUR_TURN;
+                    // outgoingMsg.data = "BLACK";
+                    // gameObj.playerB.send(JSON.stringify(outgoingMsg)); 
 
-                    //gameObj.playerB.send(message);
+                    //forward message to BLACK player
+                    gameObj.playerB.send(message);
                     gameObj.setStatus("TURN BLACK");
                 }
             }
@@ -127,18 +128,19 @@ wss.on("connection", function connection(ws) {
         }
         else {                                                              // Vice Versa
             /*
-             * player B can make a guess; 
-             * this guess is forwarded to A
+             * player BLACK (B) can make a guess; 
+             * this guess is forwarded to WHITE (A)
              */ 
             if(oMsg.type == messages.T_MADE_A_MOVE && gameObj.gameStatus == "TURN BLACK") {                        
                 //if message is Made_A_Move and gameStatus 5 (player black's turn)
                 //relay message to player black and change gameStatus to 4
 
-                var outgoingMsg = Messages.O_YOUR_TURN;                 //relay new 'your turn' message with color as data
-                outgoingMsg.data = "WHITE";
-                gameObj.playerA.send(JSON.stringify(outgoingMsg));
+                // var outgoingMsg = Messages.O_YOUR_TURN;                 //relay new 'your turn' message with color as data
+                // outgoingMsg.data = "WHITE";
+                // gameObj.playerA.send(JSON.stringify(outgoingMsg));
                 
-                //gameObj.playerA.send(message);
+                //forward message to WHITE player
+                gameObj.playerA.send(message);
                 gameObj.setStatus("TURN WHITE");
             }
 

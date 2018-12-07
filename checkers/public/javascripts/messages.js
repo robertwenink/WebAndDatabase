@@ -39,20 +39,22 @@
     /* 
      * Server to player White or player Black: your turn
      */
-    exports.T_YOUR_TURN = "YOUR-TURN";
+    exports.T_YOUR_TURN = "YOUR-TURN";                              //DONT NEED THIS ANYMORE
     exports.O_YOUR_TURN = {                         
         type: exports.T_YOUR_TURN,
-        data: null
+        data: null,
     };
     //exports.S_YOUR_TURN does not exist, as we always need to fill the data property
 
     /* 
      * Player Black to server OR Player White to server: Made A Move
      */
-    exports.T_MADE_A_MOVE = "MADE-A-MOVE";         
+    exports.T_MADE_A_MOVE = "MADE-A-MOVE";                          //JUST USE THIS ONE
     exports.O_MADE_A_MOVE = {
         type: exports.T_MADE_A_MOVE,
-        data: null
+        data: null,
+        pieceid: null,
+        to: null
     };
     //exports.S_MADE_A_MOVE does not exist, as data needs to be set
 

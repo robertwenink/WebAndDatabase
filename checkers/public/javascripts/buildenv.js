@@ -16,10 +16,17 @@ function GameState(socket){
 	var possiblemoves=[];
 	var current_checker;
 	var leftUp=false, leftDown=false, rightUp=false, rightDown=false;
-	var turn="white";
+	var turn="WHITE";
 	var whiteLeft=12 ,blackLeft=12 ;
 	var mustAttack=false; //if a piece has to attack, makeMOve must have different behaviour
 	var attackPossible=false;
+
+	this.disableTiles = function() {
+															//disable board for player [playerType]						(!)(!)(!) LAST TO FIX
+	}
+	this.enableTiles = function() {
+															//enable board for player [playerType]						(!)(!)(!) LAST TO FIX
+	}
 
 	var playtile = function(tile){
 		this.id = tile;
@@ -345,16 +352,29 @@ function GameState(socket){
 			
 			move_checker.tileId=totile.htmlid;
 			move_checker.checkIfKing();
+			
+			if (turn == gs.getPlayerType())
+				let outgoingMsg = Messages.O_MADE_A_MOVE; 
+				outgoingMsg.data = this.playertype;
+				outgoingMsg.pieceid = piecehtmlid;
+				outgoingMsg.to = totile;
+				socket.send(JSON.stringify(outgoingMsg));
 		}
 		
 	}
 
 	function switchturns(){
-		if(turn=="white"){
-			turn="black";
+		if(turn=="WHITE"){
+			turn="BLACK";
 		}
-		else if(turn=="black"){
-			turn="white";
+		else if(turn=="BLACK"){
+			turn="WHITE";
+		}
+		if (turn == gs.getPlayerType()) {
+			enableTiles();
+		}
+		else {
+			disableTiles();
 		}
 		removeActiveCss();
 		var possiblemoves=[];
@@ -365,9 +385,9 @@ function GameState(socket){
 		console.log("current color: "+turn +"span: "+span);
 		span.style.color=""+turn;
 		
-		let outgoingMsg = Messages.O_MADE_A_MOVE;
-        outgoingMsg.data = this.playertype;
-        socket.send(JSON.stringify(outgoingMsg));
+		// let outgoingMsg = Messages.O_MADE_A_MOVE;   //moved to function move(piecehtmlid,totile)
+        // outgoingMsg.data = this.playertype;
+        // socket.send(JSON.stringify(outgoingMsg));
 	}
 
 	function selectPiecesCss(currenttile,possiblemoves){
@@ -430,33 +450,24 @@ function GameState(socket){
             
             gs.setPlayerType( incomingMsg.data );//should be "WHITE" or "BLACK"
 
-            //if player type is WHITE, DO nothing
+            //if player type is WHITE, do nothing
             if (gs.getPlayerType() == "WHITE") {
-				
+				//gs.disableTiles;													//MISSING FORMULA
             }
             else {   //PLAYER IS BLACK AND THE GAME HAS JUST STARTED
-                //gs.disableTiles();												//MISSING FORMULA
+                gs.disableTiles();												//MISSING FORMULA
             }
         }
 
-        if (incomingMsg.type == Messages.T_YOUR_TURN && incomingMsg.data == gs.getPlayerType){
-			//THIS MEANS THE PLAYER IS THE PLAYER WHO IS NOW ON TURN
+        if (incomingMsg.type == Messages.T_MADE_A_MOVE && incomingMsg.data != gs.getPlayerType()){
+			//Opponents move
+			// 1: move the opponents piece
+			// 2: switch turns
 			
-			//gs.enableTiles();
-			
-			//while (movemade < 0) {
-				
-			//}
-			
-
-			// if(incomingMsg.data=="WHITE"){
-			// 	gs.setPlayerType()="WHITE";
-			// }
-			// else{
-			// 	gs.setPlayerType()="BLACK";
-			// }
-
-
+			let pieceIdHtml = incomingMsg.pieceid;
+			let toTileNumber = incomingMsg.to;
+			move(pieceIdHtml,toTileNumber);
+			switchturns();
 		}
     };
 
