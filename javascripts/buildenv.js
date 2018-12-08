@@ -8,7 +8,9 @@ var leftUp=false, leftDown=false, rightUp=false, rightDown=false;
 var turn="white";
 var whiteLeft=12 ,blackLeft=12 ;
 var mustAttack=false; //if a piece has to attack, makeMOve must have different behaviour
-var attackPossible=false;
+var possibleAttackPieces=[];
+var possibleAttackTiles=[];
+var selectPossibleAttack=false;
 
 var playtile = function(tile){
 	this.id = tile;
@@ -16,10 +18,29 @@ var playtile = function(tile){
 	this.occupied = false;//is the tile occupied?
 	this.pieceId = undefined;//which piece is on it?
 	this.id.onclick = function  () {
-		makeMove(tile.id);	
+		if(selectPossibleAttack===true){
+			if(possibleAttackPieces.indexOf(tile.id)>=0||possibleAttackTiles.indexOf(tile.id)>=0){
+				//extraShowMoves(tile.id);
+				console.log("YEEEEEAAAAAAAAHHHHH");
+				makeMove(tile.id);	
+				selectPossibleAttack=false;
+			}
+			else{
+				console.log("ERROR at On-clic, tile id is: "+tile.id+" in :? "+possibleAttackPieces+" "+possibleAttackTiles);
+			}
+		}
+		else{
+			console.log("else option");
+			makeMove(tile.id);	
+		}
 	}
 }
 
+function extraShowMoves(tilehtmlid){
+	if(tiles[tilehtmlid].pieceId!=undefined){
+		showMoves(tiles[tilehtmlid].pieceId,1);
+	}
+}
 function makeMove(tilehtmlid) {
 	console.log(tilehtmlid);
 	for(let i=0;i<possiblemoves.length;i++){
@@ -27,23 +48,27 @@ function makeMove(tilehtmlid) {
 			move(current_checker.htmlid,tiles[tilehtmlid]);
 			if(possiblemoves[i][1]!=undefined){
 				updateScore(possiblemoves[i][1].pieceId,turn);
+				if(possibleAttackPieces.length!=0){
+					possibleAttackPieces=[];
+					possibleAttackTiles=[];
+					selectPossibleAttack=false;
+				}
 				var currenttile=possiblemoves[i][0];
 				possiblemoves=[];
 				mustAttack=true;
-				showMoves(currenttile.pieceId);
+				showMoves(currenttile.pieceId,1);
 				if(possiblemoves.length==0){
-					switchturns();
 					mustAttack=false;
+					switchturns();
 				}
 			}
 			else{
 				switchturns();
-				possiblemoves=[];
 			}
 		}
 	}
 	if(tiles[tilehtmlid].pieceId!=undefined){
-			showMoves(tiles[tilehtmlid].pieceId);
+		showMoves(tiles[tilehtmlid].pieceId,1);
 	}
 }
 
@@ -193,7 +218,7 @@ function checkBlackOrWhite(idpiece){
 	else { return b_checker}
 }
 
-function showMoves (piecehtmlid) {
+function showMoves (piecehtmlid,display) {
 	leftUp=false, leftDown=false, rightUp=false, rightDown=false;
 	if(mustAttack===false){//then selecting a new checker is forbidden
 		current_checker=checkBlackOrWhite(piecehtmlid)[piecehtmlid.match(/\d+/)[0]];
@@ -231,8 +256,35 @@ function showMoves (piecehtmlid) {
 			console.log("Tile beschikbaar: "+possiblemoves[i][0].htmlid)
 		}
 		
-		
-		selectPiecesCss(currenttile,possiblemoves);
+		if(display==1){
+			selectPiecesCss(currenttile,possiblemoves);
+		}
+	}
+}
+
+function checkAttacks(){
+	console.log("CHECKING IF MUST ATTACK AT START TURN");
+	var list=checkBlackOrWhite(turn);
+	var possibleAttackPieces2=[];
+	for (let i=1;i<12;i++){
+		piece=list[i];
+		if(piece.alive===true){
+			showMoves(piece.htmlid,0);
+		}
+		for(let i=0;i<possiblemoves.length;i++){
+			if(possiblemoves[i][1]!=undefined){
+				selectPossibleAttack=true;
+				possibleAttackPieces.push(piece.tileId);
+				possibleAttackTiles.push(possiblemoves[i][0].htmlid);
+				possibleAttackPieces2.push(tiles[piece.tileId]);
+			}
+		}
+		possiblemoves=[];
+	}
+	removeActiveCss();
+	
+	for(let i=0;i<possibleAttackPieces2.length;i++){
+		document.getElementById(possibleAttackPieces2[i].htmlid).className += " active";
 	}
 }
 
@@ -346,7 +398,10 @@ function switchturns(){
 		turn="white";
 	}
 	removeActiveCss();
-	var possiblemoves=[];
+	possiblemoves=[];
+	possibleAttackTiles=[];
+	possibleAttackPieces=[];
+	
 	var current_checker=undefined;
 	var span=document.getElementById("turn");
 	
@@ -354,15 +409,16 @@ function switchturns(){
 	console.log("current color: "+turn +"span: "+span);
 	span.style.color=""+turn;
 	
+	checkAttacks();
 	
 }
 
-function selectPiecesCss(currenttile,possiblemoves){
+function selectPiecesCss(currenttile,possiblemovess){
 	removeActiveCss();
 	
 	document.getElementById(currenttile.htmlid).className += " active";
-	for(let i=0;i<possiblemoves.length;i++){
-		document.getElementById(possiblemoves[i][0].htmlid).className += " active";
+	for(let i=0;i<possiblemovess.length;i++){
+		document.getElementById(possiblemovess[i][0].htmlid).className += " active";
 	}
 }
 

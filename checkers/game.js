@@ -29,7 +29,7 @@ game.prototype.transitionStates["ABORTED"] = 7;
 game.prototype.transitionMatrix = [
     [0, 1, 0, 0, 0, 0, 0, 0],   //0 JOINT
     [1, 0, 1, 0, 0, 0, 0, 0],   //1 JOINT
-    [0, 0, 0, 1, 0, 0, 0, 1],   //2 JOINT (note: once we have two players, there is no way back!)
+    [0, 0, 0, 1, 0, 0, 0, 1],   //2 JOINT (note: once we have two players, there is no way back!), otherwise: 0,1,0...
 	[0, 0, 0, 0, 1, 1, 0, 1],   //TURN WHITE
 	[0, 0, 0, 1, 0, 0, 1, 1],   //TURN BLACK
     [0, 0, 0, 0, 0, 0, 0, 0],   //WHITE WON
@@ -85,6 +85,16 @@ game.prototype.setStatus = function (w) {
 game.prototype.hasTwoConnectedPlayers = function () {
 	//console.log("Two players!");                              //this doesnt mean it has two players, it just checks for it.
     return (this.gameState == "2 JOINT");
+};
+
+game.prototype.isTurnWhite = function () {
+	//console.log("Two players!");                              //this doesnt mean it has two players, it just checks for it.
+    return (this.gameState == "TURN WHITE");
+};
+
+game.prototype.isTurnBlack = function () {
+	//console.log("Two players!");                              //this doesnt mean it has two players, it just checks for it.
+    return (this.gameState == "TURN BLACK");
 };
 
 game.prototype.addPlayer = function (p) {

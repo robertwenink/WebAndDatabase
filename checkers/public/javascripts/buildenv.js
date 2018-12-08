@@ -1,14 +1,15 @@
 function GameState(socket){
-	this.playerType = null;
+	var playerType = null;
 	this.blackWin=null;
 	this.whiteWin=null;
 	this.getPlayerType = function () {
-        return this.playerType;
+        return playerType;
     };
 
     this.setPlayerType = function (p) {
         console.assert(typeof p == "string", "%s: Expecting a string, got a %s", arguments.callee.name, typeof p);
-        this.playerType = p;
+        playerType = p;
+		console.log("Reached! p is "+playerType);
     };
 	var tiles = [];
 	var w_checker = [];
@@ -16,7 +17,7 @@ function GameState(socket){
 	var possiblemoves=[];
 	var current_checker;
 	var leftUp=false, leftDown=false, rightUp=false, rightDown=false;
-	var turn="WHITE";
+	var turn="white";
 	var whiteLeft=12 ,blackLeft=12 ;
 	var mustAttack=false; //if a piece has to attack, makeMove must have different behaviour
 	var attackPossible=false;
@@ -34,11 +35,21 @@ function GameState(socket){
 		this.occupied = false;//is the tile occupied?
 		this.pieceId = undefined;//which piece is on it?
 		this.id.onclick = function  () {
-			makeMove(tile.id);	
+			console.log("Turn of: "+turn.toUpperCase()+" PlayerType: "+playerType);
+			if(playerType==turn.toUpperCase()){
+				var outgoingMsg = Messages.O_CLICKED_A_TILE;
+				console.log("tile id = "+tile.id);
+				outgoingMsg.data = tile.id;
+				makeMove(tile.id);	
+				socket.send(JSON.stringify(outgoingMsg));
+			}
 		}
 	}
-
-	function makeMove(tilehtmlid) {
+	this.updateGame = function(tilehtmlid){
+		makeMove(tilehtmlid);
+	}
+	
+	makeMove = function(tilehtmlid) {
 		console.log(tilehtmlid);
 		for(let i=0;i<possiblemoves.length;i++){
 			if(possiblemoves[i][0]==tiles[tilehtmlid]){
@@ -70,18 +81,18 @@ function GameState(socket){
 		text="";
 		for (var j = 0; j < 8; j++) { 
 			if(j%2==0){
-				text += '</div><div class="whitetile">';
+				text += '</div><div class="tile">';
 			}
 			i++;
-			text += '</div><div id='+ i +' class="darktile">';
+			text += '</div><div id='+ i +' class="darktile tile">';
 			
 			for (var k=0; k<3; k++){
 				i++;
-				text += '</div><div class="whitetile"></div><div id='+ i +' class="darktile">';
+				text += '</div><div class="tile"></div><div id='+ i +' class="darktile tile">';
 			}
 			
 			if(j%2==1){
-				text += '</div><div class="whitetile">';
+				text += '</div><div class="tile">';
 			}
 			
 			
@@ -91,6 +102,14 @@ function GameState(socket){
 			tiles[i] =new playtile(document.getElementById(i));//square_class bevat de divs objecten met class square, de id gebruiken volstaat dus
 		}
 		console.log(tiles)
+	}
+	
+	this.invertBoardAndPieces = function(){
+		var container=document.getElementById('tiles');
+		var childs=container.getElementsByClassName("tile");
+		for (let i = childs.length-1; i >=0; i--){
+			container.appendChild(childs[i]);
+		}
 	}
 
 	var checker = function(piece,color,tile) {
@@ -353,29 +372,25 @@ function GameState(socket){
 			move_checker.tileId=totile.htmlid;
 			move_checker.checkIfKing();
 			
-			if (turn == gs.getPlayerType())
-				let outgoingMsg = Messages.O_MADE_A_MOVE; 
-				outgoingMsg.data = this.playertype;
-				outgoingMsg.pieceid = piecehtmlid;
-				outgoingMsg.to = totile;
-				socket.send(JSON.stringify(outgoingMsg));
+//			if (turn.toUpperCase() == gs.getPlayerType()){
+//				let outgoingMsg = Messages.O_MADE_A_MOVE; 
+//				outgoingMsg.data = this.playerType;
+//				outgoingMsg.pieceid = piecehtmlid;
+//				outgoingMsg.to = totile;
+//				socket.send(JSON.stringify(outgoingMsg));
+//			}
 		}
 		
 	}
 
 	function switchturns(){
-		if(turn=="WHITE"){
-			turn="BLACK";
+		if(turn=="white"){
+			turn="black";
 		}
-		else if(turn=="BLACK"){
-			turn="WHITE";
+		else if(turn=="black"){
+			turn="white";
 		}
-		// if (turn == gs.getPlayerType()) {
-		// 	enableTiles();
-		// }
-		// else {
-		// 	disableTiles();
-		// }
+
 		removeActiveCss();
 		var possiblemoves=[];
 		var current_checker=undefined;
@@ -384,10 +399,6 @@ function GameState(socket){
 		span.innerHTML="Turn: "+ turn;
 		console.log("current color: "+turn +"span: "+span);
 		span.style.color=""+turn;
-		
-		// let outgoingMsg = Messages.O_MADE_A_MOVE;   //moved to function move(piecehtmlid,totile)
-        // outgoingMsg.data = this.playertype;
-        // socket.send(JSON.stringify(outgoingMsg));
 	}
 
 	function selectPiecesCss(currenttile,possiblemoves){
@@ -424,7 +435,7 @@ function GameState(socket){
 			statusbar.innerHTML = "White wins";
 			this.whiteWin=true;
 		}
-		//socket.close();
+		socket.close();
 	}
 
 	function playSound(sound){
@@ -444,31 +455,19 @@ function GameState(socket){
 	socket.onmessage = function (event) {
 
         let incomingMsg = JSON.parse(event.data);
- 
+		console.log("Message received: "+incomingMsg.data);//correct
         //set player type
         if (incomingMsg.type == Messages.T_PLAYER_TYPE) { 
-            
+            console.log("Message received after if: "+incomingMsg.data);
             gs.setPlayerType( incomingMsg.data );//should be "WHITE" or "BLACK"
-
-            //if player type is WHITE, do nothing
-            if (gs.getPlayerType() == "WHITE") {
-				//gs.disableTiles();													//MISSING FORMULA
-            }
-            else {   //PLAYER IS BLACK AND THE GAME HAS JUST STARTED
-                //gs.disableTiles();												//MISSING FORMULA
-            }
+			if( incomingMsg.data == "BLACK"){
+				gs.invertBoardAndPieces();
+			}
         }
 
-        if (incomingMsg.type == Messages.T_MADE_A_MOVE && incomingMsg.data != gs.getPlayerType()){
-			//Opponents move
-			// 1: move the opponents piece
-			// 2: switch turns
-			
-			let pieceIdHtml = incomingMsg.pieceid;
-			let toTileNumber = incomingMsg.to;
-			move(pieceIdHtml,toTileNumber);
-			switchturns();
-		}
+		if( incomingMsg.type == Messages.T_CLICKED_A_TILE){
+            gs.updateGame(incomingMsg.data);
+        }
     };
 
     socket.onopen = function(){

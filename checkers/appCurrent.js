@@ -93,66 +93,29 @@ wss.on("connection", function connection(ws) {
         let gameObj = websockets[con.id];
         let isPlayerA = (gameObj.playerA == con) ? true : false;          
 
-        if (isPlayerA) {                                                   //isPlayerWhite 
-            
-            /*
-             * player WHITE (A) can only make first move
-             * if player BLACK (B) is already available, send message to BLACK (B)    W
-             */
-            if (oMsg.type == messages.T_MADE_A_MOVE && gameObj.gameStatus == "TURN WHITE") {  
+		if (isPlayerA) {// was het lullo A die de message genereerde?
 
-                //if message is Made_A_Move type and gameStatus 4 (player white's turn)
-                //if player black has joined
-                //relay message to player black and change gameStatus to 5
+			if (oMsg.type == messages.T_CLICKED_A_TILE) { 
 
-                if(gameObj.hasTwoConnectedPlayers()) {
-                    // var outgoingMsg = Messages.O_YOUR_TURN;
-                    // outgoingMsg.data = "BLACK";
-                    // gameObj.playerB.send(JSON.stringify(outgoingMsg)); 
+				//if(gameObj.hasTwoConnectedPlayers()){    
+					gameObj.playerB.send(message); 
+				//}                
+			}
+		}
+		else {
+			
+			if(oMsg.type == messages.T_CLICKED_A_TILE){
+				//if(gameObj.hasTwoConnectedPlayers()){    
+					gameObj.playerA.send(message); 
+				//} 
+			}
 
-                    //forward message to BLACK player
-                    gameObj.playerB.send(message);
-                    gameObj.setStatus("TURN BLACK");
-                }
-            }
-
-            /*
-             * any player can state can state who won/lost.
-             */ 
-            if( oMsg.type == messages.T_GAME_WON_BY){                       // If message is GAME_OVER whoever send it won.
-                gameObj.setStatus("WHITE");                               // set Status to 6 (white won) or 7 (black won)
-                //game was won by somebody, update statistics
-                gameStatus.gamesCompleted++;
-            }            
-
-        }
-        else {                                                              // Vice Versa
-            /*
-             * player BLACK (B) can make a guess; 
-             * this guess is forwarded to WHITE (A)
-             */ 
-            if(oMsg.type == messages.T_MADE_A_MOVE && gameObj.gameStatus == "TURN BLACK") {                        
-                //if message is Made_A_Move and gameStatus 5 (player black's turn)
-                //relay message to player black and change gameStatus to 4
-
-                // var outgoingMsg = Messages.O_YOUR_TURN;                 //relay new 'your turn' message with color as data
-                // outgoingMsg.data = "WHITE";
-                // gameObj.playerA.send(JSON.stringify(outgoingMsg));
-                
-                //forward message to WHITE player
-                gameObj.playerA.send(message);
-                gameObj.setStatus("TURN WHITE");
-            }
-
-            /*
-             * any player can state can state who won/lost.
-             */ 
-            if( oMsg.type == messages.T_GAME_WON_BY){                       // If message is GAME_OVER whoever send it won.
-                gameObj.setStatus("BLACK");                               // set Status to 6 (white won) or 7 (black won)
-                //game was won by somebody, update statistics
-                gameStatus.gamesCompleted++;
-            }            
-        }                                                                   // buildenv should incl a choice stop depending on game status 4 or 5.
+			if( oMsg.type == messages.T_GAME_WON_BY){
+				gameObj.setStatus(oMsg.data);
+				//game was won by somebody, update statistics
+				gameStatus.gamesCompleted++;
+			}            
+		}                                                                              
     });
 
     con.on("close", function (code) { 
@@ -161,7 +124,7 @@ wss.on("connection", function connection(ws) {
          * code 1001 means almost always closing initiated by the client;
          * source: https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
          */
-        console.log(con.id + " disconnected ...");
+        console.log(con.id + " disconnected ... , with code: "+code);
 
         if (code == "1001") {
             /*

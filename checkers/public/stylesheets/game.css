@@ -30,7 +30,7 @@ main {
 	width: 100%;
 }
 
-.darktile , .whitetile{
+.tile{
     width: 12.5%;
     height: 12.5%;
 	float: left;
@@ -93,7 +93,7 @@ main {
 }
 
 #turn span{
-	overflow: auto;
+	overflow: hidden;
 }
 
 #scoreOpponent {

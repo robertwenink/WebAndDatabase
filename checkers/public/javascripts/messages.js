@@ -49,12 +49,10 @@
     /* 
      * Player Black to server OR Player White to server: Made A Move
      */
-    exports.T_MADE_A_MOVE = "MADE-A-MOVE";                          //JUST USE THIS ONE
-    exports.O_MADE_A_MOVE = {
-        type: exports.T_MADE_A_MOVE,
+    exports.T_CLICKED_A_TILE = "CLICKED_A_TILE";                          //JUST USE THIS ONE
+    exports.O_CLICKED_A_TILE = {
+        type: exports.T_CLICKED_A_TILE,
         data: null,
-        pieceid: null,
-        to: null
     };
     //exports.S_MADE_A_MOVE does not exist, as data needs to be set
 
