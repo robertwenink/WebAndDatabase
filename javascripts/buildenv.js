@@ -8,9 +8,8 @@ var leftUp=false, leftDown=false, rightUp=false, rightDown=false;
 var turn="white";
 var whiteLeft=12 ,blackLeft=12 ;
 var mustAttack=false; //if a piece has to attack, makeMOve must have different behaviour
-var possibleAttackPieces=[];
-var possibleAttackTiles=[];
-var selectPossibleAttack=false;
+var possibleAttackFrom=[];
+var possibleAttackTo=[];
 
 var playtile = function(tile){
 	this.id = tile;
@@ -18,41 +17,19 @@ var playtile = function(tile){
 	this.occupied = false;//is the tile occupied?
 	this.pieceId = undefined;//which piece is on it?
 	this.id.onclick = function  () {
-		if(selectPossibleAttack===true){
-			if(possibleAttackPieces.indexOf(tile.id)>=0||possibleAttackTiles.indexOf(tile.id)>=0){
-				//extraShowMoves(tile.id);
-				console.log("YEEEEEAAAAAAAAHHHHH");
-				makeMove(tile.id);	
-				selectPossibleAttack=false;
-			}
-			else{
-				console.log("ERROR at On-clic, tile id is: "+tile.id+" in :? "+possibleAttackPieces+" "+possibleAttackTiles);
-			}
-		}
-		else{
-			console.log("else option");
-			makeMove(tile.id);	
-		}
+		makeMove(tile.id);
 	}
 }
 
-function extraShowMoves(tilehtmlid){
-	if(tiles[tilehtmlid].pieceId!=undefined){
-		showMoves(tiles[tilehtmlid].pieceId,1);
-	}
-}
 function makeMove(tilehtmlid) {
 	console.log(tilehtmlid);
 	for(let i=0;i<possiblemoves.length;i++){
 		if(possiblemoves[i][0]==tiles[tilehtmlid]){
 			move(current_checker.htmlid,tiles[tilehtmlid]);
+			possibleAttackFrom=[];
+			possibleAttackTo=[];
 			if(possiblemoves[i][1]!=undefined){
 				updateScore(possiblemoves[i][1].pieceId,turn);
-				if(possibleAttackPieces.length!=0){
-					possibleAttackPieces=[];
-					possibleAttackTiles=[];
-					selectPossibleAttack=false;
-				}
 				var currenttile=possiblemoves[i][0];
 				possiblemoves=[];
 				mustAttack=true;
@@ -68,7 +45,18 @@ function makeMove(tilehtmlid) {
 		}
 	}
 	if(tiles[tilehtmlid].pieceId!=undefined){
-		showMoves(tiles[tilehtmlid].pieceId,1);
+		if(possibleAttackFrom.length>0){
+			if(possibleAttackFrom.indexOf(tilehtmlid)>=0){
+				console.log("possible attack part");
+				mustAttack=true;
+				showMoves(tiles[tilehtmlid].pieceId,1);
+				mustAttack=false;
+			}
+		}
+		else{
+			console.log("Check regular move");
+			showMoves(tiles[tilehtmlid].pieceId,1);
+		}
 	}
 }
 
@@ -220,7 +208,7 @@ function checkBlackOrWhite(idpiece){
 
 function showMoves (piecehtmlid,display) {
 	leftUp=false, leftDown=false, rightUp=false, rightDown=false;
-	if(mustAttack===false){//then selecting a new checker is forbidden
+	if(mustAttack===false||possibleAttackFrom.length>0){//then selecting a new checker is forbidden
 		current_checker=checkBlackOrWhite(piecehtmlid)[piecehtmlid.match(/\d+/)[0]];
 	}
 	
@@ -265,27 +253,31 @@ function showMoves (piecehtmlid,display) {
 function checkAttacks(){
 	console.log("CHECKING IF MUST ATTACK AT START TURN");
 	var list=checkBlackOrWhite(turn);
-	var possibleAttackPieces2=[];
+	var possibleAttackFrom2=[];
 	for (let i=1;i<12;i++){
 		piece=list[i];
 		if(piece.alive===true){
+			mustAttack=true;
+			current_checker=checkBlackOrWhite(piece.htmlid)[piece.htmlid.match(/\d+/)[0]];
 			showMoves(piece.htmlid,0);
+			mustAttack=false;
 		}
 		for(let i=0;i<possiblemoves.length;i++){
 			if(possiblemoves[i][1]!=undefined){
-				selectPossibleAttack=true;
-				possibleAttackPieces.push(piece.tileId);
-				possibleAttackTiles.push(possiblemoves[i][0].htmlid);
-				possibleAttackPieces2.push(tiles[piece.tileId]);
+				console.log("possible initial attack moves found");
+				possibleAttackFrom.push(tiles[piece.tileId].htmlid);
+				possibleAttackTo.push(possiblemoves[i][0].htmlid);
+				possibleAttackFrom2.push(tiles[piece.tileId]);
 			}
 		}
 		possiblemoves=[];
 	}
 	removeActiveCss();
 	
-	for(let i=0;i<possibleAttackPieces2.length;i++){
-		document.getElementById(possibleAttackPieces2[i].htmlid).className += " active";
+	for(let i=0;i<possibleAttackFrom2.length;i++){
+		document.getElementById(possibleAttackFrom2[i].htmlid).className += " active";
 	}
+	current_checker=null;
 }
 
 function onlyAttackPossibleMoves(){
@@ -399,8 +391,8 @@ function switchturns(){
 	}
 	removeActiveCss();
 	possiblemoves=[];
-	possibleAttackTiles=[];
-	possibleAttackPieces=[];
+	possibleAttackTo=[];
+	possibleAttackFrom=[];
 	
 	var current_checker=undefined;
 	var span=document.getElementById("turn");

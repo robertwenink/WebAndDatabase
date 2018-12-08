@@ -20,7 +20,8 @@ function GameState(socket){
 	var turn="white";
 	var whiteLeft=12 ,blackLeft=12 ;
 	var mustAttack=false; //if a piece has to attack, makeMove must have different behaviour
-	var attackPossible=false;
+	var possibleAttackFrom=[];
+	var possibleAttackTo=[];
 
 	// this.disableTiles = function() {
 	// 														//disable board for player [playerType]						(!)(!)(!) LAST TO FIX
@@ -54,25 +55,37 @@ function GameState(socket){
 		for(let i=0;i<possiblemoves.length;i++){
 			if(possiblemoves[i][0]==tiles[tilehtmlid]){
 				move(current_checker.htmlid,tiles[tilehtmlid]);
+				possibleAttackFrom=[];
+				possibleAttackTo=[];
 				if(possiblemoves[i][1]!=undefined){
 					updateScore(possiblemoves[i][1].pieceId,turn);
 					var currenttile=possiblemoves[i][0];
 					possiblemoves=[];
 					mustAttack=true;
-					showMoves(currenttile.pieceId);
+					showMoves(currenttile.pieceId,1);
 					if(possiblemoves.length==0){
-						switchturns();
 						mustAttack=false;
+						switchturns();
 					}
 				}
 				else{
 					switchturns();
-					possiblemoves=[];
 				}
 			}
 		}
 		if(tiles[tilehtmlid].pieceId!=undefined){
-				showMoves(tiles[tilehtmlid].pieceId);
+			if(possibleAttackFrom.length>0){
+				if(possibleAttackFrom.indexOf(tilehtmlid)>=0){
+					console.log("possible attack part");
+					mustAttack=true;
+					showMoves(tiles[tilehtmlid].pieceId,1);
+					mustAttack=false;
+				}
+			}
+			else{
+				console.log("Check regular move");
+				showMoves(tiles[tilehtmlid].pieceId,1);
+			}
 		}
 	}
 
@@ -230,9 +243,9 @@ function GameState(socket){
 		else { return b_checker}
 	}
 
-	function showMoves (piecehtmlid) {
+	function showMoves (piecehtmlid,display) {
 		leftUp=false, leftDown=false, rightUp=false, rightDown=false;
-		if(mustAttack===false){//then selecting a new checker is forbidden
+		if(mustAttack===false||possibleAttackFrom.length>0){//then selecting a new checker is forbidden
 			current_checker=checkBlackOrWhite(piecehtmlid)[piecehtmlid.match(/\d+/)[0]];
 		}
 		
@@ -269,8 +282,40 @@ function GameState(socket){
 			}
 			
 			
-			selectPiecesCss(currenttile,possiblemoves);
+			if(display==1){
+				selectPiecesCss(currenttile,possiblemoves);
+			}
 		}
+	}
+	
+	function checkAttacks(){
+		console.log("CHECKING IF MUST ATTACK AT START TURN");
+		var list=checkBlackOrWhite(turn);
+		var possibleAttackFrom2=[];
+		for (let i=1;i<12;i++){
+			piece=list[i];
+			if(piece.alive===true){
+				mustAttack=true;
+				current_checker=checkBlackOrWhite(piece.htmlid)[piece.htmlid.match(/\d+/)[0]];
+				showMoves(piece.htmlid,0);
+				mustAttack=false;
+			}
+			for(let i=0;i<possiblemoves.length;i++){
+				if(possiblemoves[i][1]!=undefined){
+					console.log("possible initial attack moves found");
+					possibleAttackFrom.push(tiles[piece.tileId].htmlid);
+					possibleAttackTo.push(possiblemoves[i][0].htmlid);
+					possibleAttackFrom2.push(tiles[piece.tileId]);
+				}
+			}
+			possiblemoves=[];
+		}
+		removeActiveCss();
+		
+		for(let i=0;i<possibleAttackFrom2.length;i++){
+			document.getElementById(possibleAttackFrom2[i].htmlid).className += " active";
+		}
+		current_checker=null;
 	}
 
 	function onlyAttackPossibleMoves(){
@@ -390,15 +435,20 @@ function GameState(socket){
 		else if(turn=="black"){
 			turn="white";
 		}
-
 		removeActiveCss();
-		var possiblemoves=[];
+		possiblemoves=[];
+		possibleAttackTo=[];
+		possibleAttackFrom=[];
+		
 		var current_checker=undefined;
 		var span=document.getElementById("turn");
 		
 		span.innerHTML="Turn: "+ turn;
 		console.log("current color: "+turn +"span: "+span);
 		span.style.color=""+turn;
+		
+		checkAttacks();
+		
 	}
 
 	function selectPiecesCss(currenttile,possiblemoves){
