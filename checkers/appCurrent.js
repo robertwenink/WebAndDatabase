@@ -8,8 +8,12 @@ var messages = require("./public/javascripts/messages");
 var gameStatus = require("./statTracker");
 var Game = require("./game");
 
+var cookies = require("cookie-parser");
+
 var port = process.argv[2];
 var app = express();
+
+app.use(cookies());
 
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
@@ -18,6 +22,7 @@ app.get("/play", indexRouter);
 
 //TODO: move to routes/index
 app.get("/", (req, res) => {
+    res.cookie("chocolate cookie", "first cookie");
 	res.render("splash.ejs", { gamesInitialized: gameStatus.gamesInitialized, gamesCompleted: gameStatus.gamesCompleted, blackWins: gameStatus.blackWins, whiteWins: gameStatus.whiteWins});
 });
 
