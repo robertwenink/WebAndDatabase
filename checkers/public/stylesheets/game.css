@@ -139,7 +139,7 @@ main {
 	display: none;
 	font-size: 10vh;
 	font-weight: 900;
-	height:25vh;
+	height:50vh;
 	width: 35vh;
 	border-radius: 10%;
 	letter-spacing: 0.1vh;
@@ -147,5 +147,14 @@ main {
 	position: relative;
 	text-align: center;
 	z-index: 10;
+	font-family: Calibri, Candara;
+}
+#button {
+	color: white;
+	font-size: 10vh;
+	font-weight: 900;
+	border-radius: 10%;
+	letter-spacing: 0.1vh;
+	margin: 37.5vh auto;
 	font-family: Calibri, Candara;
 }

@@ -22,6 +22,7 @@ function GameState(socket){
 	var mustAttack=false; //if a piece has to attack, makeMove must have different behaviour
 	var possibleAttackFrom=[];
 	var possibleAttackTo=[];
+	var no_players = 1;
 
 	var playtile = function(tile){
 		this.id = tile;
@@ -29,18 +30,31 @@ function GameState(socket){
 		this.occupied = false;//is the tile occupied?
 		this.pieceId = undefined;//which piece is on it?
 		this.id.onclick = function  () {
-			console.log("Turn of: "+turn.toUpperCase()+" PlayerType: "+playerType);
-			if(playerType==turn.toUpperCase()){
+			console.log("Turn of: "+turn.toUpperCase()+" PlayerType: "+playerType +" no players: " + no_players);
+			if(playerType==turn.toUpperCase() && no_players == 2){
 				var outgoingMsg = Messages.O_CLICKED_A_TILE;
 				console.log("tile id = "+tile.id);
 				outgoingMsg.data = tile.id;
-				makeMove(tile.id);	
 				socket.send(JSON.stringify(outgoingMsg));
+				makeMove(tile.id);
 			}
 		}
 	}
 	this.updateGame = function(tilehtmlid){
 		makeMove(tilehtmlid);
+	}
+
+	this.enoughPlayers = function() {
+		no_players = 2;
+	}
+
+	endGameWhite = function() {
+		this.blackLeft = 0;
+		endGame();
+	}
+	endGameBlack = function() {
+		this.whiteLeft = 0;
+		endGame();
 	}
 	
 	makeMove = function(tilehtmlid) {
@@ -409,13 +423,6 @@ function GameState(socket){
 			move_checker.tileId=totile.htmlid;
 			move_checker.checkIfKing();
 			
-//			if (turn.toUpperCase() == gs.getPlayerType()){
-//				let outgoingMsg = Messages.O_MADE_A_MOVE; 
-//				outgoingMsg.data = this.playerType;
-//				outgoingMsg.pieceid = piecehtmlid;
-//				outgoingMsg.to = totile;
-//				socket.send(JSON.stringify(outgoingMsg));
-//			}
 		}
 		
 	}
@@ -468,12 +475,11 @@ function GameState(socket){
 		document.getElementById('status').style.display = "block";
 		var statusbar=document.getElementById('statusbar');
 		statusbar.style.display = "block";
-		
-		var outgoingMsgGameOver = Messages.O_GAME_OVER;
 
 		if(whiteLeft == 0){
-			statusbar.innerHTML = "Black wins, play again?";
+			statusbar.innerHTML += "Black wins";
 			if (playerType == "BLACK") {
+				var outgoingMsgGameOver = Messages.O_GAME_OVER;
 				outgoingMsgGameOver.data = "BLACK";	
 				socket.send(JSON.stringify(outgoingMsgGameOver));
 			}
@@ -481,14 +487,16 @@ function GameState(socket){
 			
 		}
 		else{
-			statusbar.innerHTML = "White wins, play again?";
+			statusbar.innerHTML += "White wins";
 			if (playerType == "WHITE") {
+				var outgoingMsgGameOver = Messages.O_GAME_OVER;
 				outgoingMsgGameOver.data = "WHITE";	
 				socket.send(JSON.stringify(outgoingMsgGameOver));
 			}
 			this.whiteWin=true;
 		}
-		socket.close();
+		//setTimeout(socket.close(), 30000);
+		//socket.close();
 	}
 
 	function playSound(sound){
@@ -512,15 +520,20 @@ function GameState(socket){
         //set player type
         if (incomingMsg.type == Messages.T_PLAYER_TYPE) { 
             console.log("Message received after if: "+incomingMsg.data);
-            gs.setPlayerType( incomingMsg.data );//should be "WHITE" or "BLACK"
+			gs.setPlayerType( incomingMsg.data );//should be "WHITE" or "BLACK"
 			if( incomingMsg.data == "BLACK"){
 				gs.invertBoardAndPieces();
+				gs.enoughPlayers();
 			}
         }
 
 		if( incomingMsg.type == Messages.T_CLICKED_A_TILE){
             gs.updateGame(incomingMsg.data);
-        }
+		}
+		
+		if (incomingMsg.type == Messages.T_SECOND_PLAYER_JOINED){
+			gs.enoughPlayers();
+		}
     };
 
     socket.onopen = function(){
@@ -537,6 +550,7 @@ function GameState(socket){
     socket.onerror = function(){  
     };
 })();
+
 //move("black6",this.tiles[19]);
 //move("black9",this.tiles[18]);
 //move("black5",this.tiles[9]);

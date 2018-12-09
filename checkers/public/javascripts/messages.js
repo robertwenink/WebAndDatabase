@@ -3,11 +3,12 @@
     /* 
      * Client to server: game is complete, the winner is ... 
      */
-    exports.T_GAME_WON_BY = "GAME-WON-BY";             
-    exports.O_GAME_WON_BY = {
-        type: exports.T_GAME_WON_BY,
+    exports.T_SECOND_PLAYER_JOINED = "SECOND-PLAYER-JOINED";             
+    exports.O_SECOND_PLAYER_JOINED = {
+        type: exports.T_SECOND_PLAYER_JOINED,
         data: null
     };
+    exports.S_SECOND_PLAYER_JOINED = JSON.stringify(exports.O_SECOND_PLAYER_JOINED);
 
     /*
      * Server to client: abort game (e.g. if second player exited the game) 

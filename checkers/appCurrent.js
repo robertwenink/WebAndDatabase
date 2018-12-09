@@ -61,6 +61,11 @@ wss.on("connection", function connection(ws) {
      * inform the client about its assigned player type
      */ 
     con.send((playerType == "WHITE") ? messages.S_PLAYER_WHITE : messages.S_PLAYER_BLACK);
+    
+    if (playerType == "BLACK") {
+        currentGame.playerA.send(messages.S_SECOND_PLAYER_JOINED);
+    }
+
 
     /*
      * client B receives the target word (if already available)
@@ -109,19 +114,19 @@ wss.on("connection", function connection(ws) {
 					gameObj.playerA.send(message); 
 				//} 
 			}
-
-			if( oMsg.type == messages.T_GAME_WON_BY){
-				gameObj.setStatus(oMsg.data);
-                //game was won by somebody, update statistics
-                if (oMsg.data == "BLACK") {
-                    gameStatus.blackWins++;
-                }
-                else {
-                    gameStatus.whiteWins++;
-                }
-				gameStatus.gamesCompleted++;
-			}            
-		}                                                                              
+        }
+        if( oMsg.type == messages.T_GAME_OVER){
+            console.log("Game " + con.id + " over, won by: " + oMsg.data);
+            gameObj.setStatus(oMsg.data);
+            //game was won by somebody, update statistics
+            if (oMsg.data == "BLACK") {
+                gameStatus.blackWins++;
+            }
+            if (oMsg.data == "WHITE") {
+                gameStatus.whiteWins++;
+            }
+            gameStatus.gamesCompleted++;
+        }                                                                      
     });
 
     con.on("close", function (code) { 
