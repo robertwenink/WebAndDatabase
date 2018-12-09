@@ -469,12 +469,23 @@ function GameState(socket){
 		var statusbar=document.getElementById('statusbar');
 		statusbar.style.display = "block";
 		
+		var outgoingMsgGameOver = Messages.O_GAME_OVER;
+
 		if(whiteLeft == 0){
-			statusbar.innerHTML = "Black wins";
+			statusbar.innerHTML = "Black wins, play again?";
+			if (playerType == "BLACK") {
+				outgoingMsgGameOver.data = "BLACK";	
+				socket.send(JSON.stringify(outgoingMsgGameOver));
+			}
 			this.blackWin=true;
+			
 		}
 		else{
-			statusbar.innerHTML = "White wins";
+			statusbar.innerHTML = "White wins, play again?";
+			if (playerType == "WHITE") {
+				outgoingMsgGameOver.data = "WHITE";	
+				socket.send(JSON.stringify(outgoingMsgGameOver));
+			}
 			this.whiteWin=true;
 		}
 		socket.close();

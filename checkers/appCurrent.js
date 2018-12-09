@@ -112,7 +112,13 @@ wss.on("connection", function connection(ws) {
 
 			if( oMsg.type == messages.T_GAME_WON_BY){
 				gameObj.setStatus(oMsg.data);
-				//game was won by somebody, update statistics
+                //game was won by somebody, update statistics
+                if (oMsg.data == "BLACK") {
+                    gameStatus.blackWins++;
+                }
+                else {
+                    gameStatus.whiteWins++;
+                }
 				gameStatus.gamesCompleted++;
 			}            
 		}                                                                              

@@ -20,7 +20,11 @@
                 </div>
                 <h1>Draughts</h1>
                 <h2>A two player game</h2>
-
+                <h3><%= gamesInitialized %> <%if (gamesInitialized != 1) { %> games <% } else { %> game <% } %> initialized, 
+                    <%= gamesCompleted %> completed, 
+                    black won <%= blackWins %> <%if (blackWins != 1) { %> times <% } else { %> time <% } %>, 
+                    white won <%= whiteWins %> <%if (whiteWins != 1) { %> times <% } else { %> time <% } %>
+                </h3>
             </section>
             <section id="right">
                 <!-- Upon entering your web application's URL, a splash screen is shown that allows 
