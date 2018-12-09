@@ -83,8 +83,8 @@ game.prototype.setStatus = function (w) {
 };
 
 game.prototype.hasTwoConnectedPlayers = function () {
-	//console.log("Two players!");                              //this doesnt mean it has two players, it just checks for it.
-    return (this.gameState == "2 JOINT");
+	//If a game has started it has any of the following gameStates and a new game should be created if someone tries to connect to the server.
+    return (this.gameState == "2 JOINT" || this.gameState == "TURN WHITE" || this.gameState == "TURN BLACK" || this.gameState == "WHITE" || this.gameState == "BLACK" || this.gameState == "ABORTED");
 };
 
 game.prototype.isTurnWhite = function () {

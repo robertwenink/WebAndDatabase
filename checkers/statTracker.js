@@ -5,7 +5,7 @@ var gameStatus = {
     gamesAborted : 0,       /* number of games aborted */
     gamesCompleted : 0,     /* number of games successfully completed */
     blackWins : 0,          /* number of games won by black */
-    whiteWins : 0,          /* number of games won by white */
+    whiteWins : 0           /* number of games won by white */
 };
 
 module.exports = gameStatus;

@@ -18,7 +18,7 @@ app.get("/play", indexRouter);
 
 //TODO: move to routes/index
 app.get("/", (req, res) => {
-	res.render("splash.ejs", { gamesInitialized: gameStatus.gamesInitialized, gamesCompleted: gameStatus.gamesCompleted });
+	res.render("splash.ejs", { gamesInitialized: gameStatus.gamesInitialized, gamesCompleted: gameStatus.gamesCompleted, blackWins: gameStatus.blackWins, whiteWins: gameStatus.whiteWins});
 });
 
 var server = http.createServer(app);
@@ -40,7 +40,7 @@ setInterval(function() {
             }
         }
     }
-}, 50000);
+}, 500000);
 
 var currentGame = new Game(gameStatus.gamesInitialized++);
 var connectionID = 0;//each websocket receives a unique ID
