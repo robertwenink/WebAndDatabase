@@ -75,7 +75,7 @@ h3 {
     animation-direction: alternate;
 }
 
-.square:hover {
+.square:hover{
     background-image: url("../images/white.png");
     transform: scale(1.1) rotateZ(-5deg);
 }
@@ -132,6 +132,12 @@ button {
 
 button:hover {
     background-color: #000;
+    transition: background-color 2s ease;
+    text-decoration: underline overline;
+}
+
+button:active {
+    background-color: rgb(255,0,0);
     transition: background-color 2s ease;
     text-decoration: underline overline;
 }

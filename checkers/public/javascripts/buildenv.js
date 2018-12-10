@@ -48,12 +48,12 @@ function GameState(socket){
 		no_players = 2;
 	}
 
-	endGameWhite = function() {
-		this.blackLeft = 0;
+	this.endGameWhite = function() {
+		blackLeft = 0;
 		endGame();
 	}
-	endGameBlack = function() {
-		this.whiteLeft = 0;
+	this.endGameBlack = function() {
+		whiteLeft = 0;
 		endGame();
 	}
 	
@@ -434,6 +434,11 @@ function GameState(socket){
 		else if(turn=="black"){
 			turn="white";
 		}
+		
+		var outgoingMsgTurn = Messages.O_TURN_OF;
+		outgoingMsgTurn.data = "TURN "+turn.toUpperCase();	
+		socket.send(JSON.stringify(outgoingMsgTurn));
+		
 		removeActiveCss();
 		possiblemoves=[];
 		possibleAttackTo=[];

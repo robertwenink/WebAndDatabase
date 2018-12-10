@@ -15,8 +15,8 @@ game.prototype.transitionStates["1 JOINT"] = 1;
 game.prototype.transitionStates["2 JOINT"] = 2;
 game.prototype.transitionStates["TURN WHITE"] = 3;
 game.prototype.transitionStates["TURN BLACK"] = 4;
-game.prototype.transitionStates["WHITE"] = 5; //WHITE won
-game.prototype.transitionStates["BLACK"] = 6; //BLACK won
+game.prototype.transitionStates["WHITE WON"] = 5; //WHITE won
+game.prototype.transitionStates["BLACK WON"] = 6; //BLACK won
 game.prototype.transitionStates["ABORTED"] = 7;
 
 /*

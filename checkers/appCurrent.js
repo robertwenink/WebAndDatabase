@@ -126,12 +126,18 @@ wss.on("connection", function connection(ws) {
             //game was won by somebody, update statistics
             if (oMsg.data == "BLACK") {
                 gameStatus.blackWins++;
+				gameObj.setStatus("BLACK WON");
             }
             if (oMsg.data == "WHITE") {
                 gameStatus.whiteWins++;
+				gameObj.setStatus("WHITE WON");
             }
             gameStatus.gamesCompleted++;
-        }                                                                      
+        }          
+
+		if( oMsg.type == messages.T_TURN_OF){
+			gameObj.setStatus(oMsg.data);
+		}
     });
 
     con.on("close", function (code) { 

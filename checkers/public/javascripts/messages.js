@@ -40,9 +40,9 @@
     /* 
      * Server to player White or player Black: your turn
      */
-    exports.T_YOUR_TURN = "YOUR-TURN";                              //DONT NEED THIS ANYMORE
-    exports.O_YOUR_TURN = {                         
-        type: exports.T_YOUR_TURN,
+    exports.T_TURN_OF = "TURN_OF";                              //DONT NEED THIS ANYMORE
+    exports.O_TURN_OF = {                         
+        type: exports.T_TURN_OF,
         data: null
     };
     //exports.S_YOUR_TURN does not exist, as we always need to fill the data property
