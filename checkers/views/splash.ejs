@@ -20,9 +20,9 @@
                 </div>
                 <h1>Draughts</h1>
                 <h2>A two player game</h2>
-                <h3><%= gamesInitialized-1 %> <%if (gamesInitialized != 1) { %> games <% } else { %> game <% } %> initialized, 
+                <h3><%= gamesInitialized-1 %> <%if (gamesInitialized-1 != 1) { %> games <% } else { %> game <% } %> initialized, 
                     <%= gamesCompleted %> completed, 
-                    black won <%= blackWins %> <%if (blackWins != 1) { %> times <% } else { %> time <% } %>, 
+                    black won <%= blackWins %> <%if (blackWins != 1) { %> times<% } else { %> time<% } %>, 
                     white won <%= whiteWins %> <%if (whiteWins != 1) { %> times <% } else { %> time <% } %>
                 </h3>
             </section>

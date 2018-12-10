@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-<!--    Note: this file is not in use any longer, it is superseded by splash.ejs which
-        is an almost exact copy (apart from template tags).
--->
 <html>
     <head>
         <title>Draughts!</title>
@@ -23,17 +20,12 @@
                 </div>
                 <h1>Draughts</h1>
                 <h2>A two player game</h2>
-                <!-- Hier ook een .ejs bestand van maken en hier dan dezelfde statistieken weergeven?-->
-                <!-- <h3><%= gamesInitialized %> 
-                    <%if (gamesInitialized != 1) { %>
-                        games
-                    <% } else { %>
-                        game
-                    <% } %>
-                    initialized, 
-                    <%= gamesCompleted %> 
-                    completed
-                </h3> --> 
+                <!-- Uncomment in .ejs file -->
+                <!-- <h3><%= gamesInitialized-1 %> <%if (gamesInitialized != 1) { %> games <% } else { %> game <% } %> initialized, 
+                    <%= gamesCompleted %> completed, 
+                    black won <%= blackWins %> <%if (blackWins != 1) { %> times <% } else { %> time <% } %>, 
+                    white won <%= whiteWins %> <%if (whiteWins != 1) { %> times <% } else { %> time <% } %>
+                </h3> -->
             </section>
             <section id="right">
                 <!-- Upon entering your web application's URL, a splash screen is shown that allows 
