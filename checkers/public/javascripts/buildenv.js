@@ -48,13 +48,9 @@ function GameState(socket){
 		no_players = 2;
 	}
 
-	this.endGameWhite = function() {
-		blackLeft = 0;
+	this.endGameAbort = function() {
 		endGame();
-	}
-	this.endGameBlack = function() {
-		whiteLeft = 0;
-		endGame();
+		
 	}
 	
 	makeMove = function(tilehtmlid) {
@@ -491,7 +487,7 @@ function GameState(socket){
 			this.blackWin=true;
 			
 		}
-		else{
+		else if(blackLeft==0){
 			statusbar.innerHTML += "White wins";
 			if (playerType == "WHITE") {
 				var outgoingMsgGameOver = Messages.O_GAME_OVER;
@@ -499,6 +495,9 @@ function GameState(socket){
 				socket.send(JSON.stringify(outgoingMsgGameOver));
 			}
 			this.whiteWin=true;
+		}
+		else{
+			statusbar.innerHTML += "Game aborted :(";
 		}
 		//setTimeout(socket.close(), 30000);
 		//socket.close();
@@ -549,6 +548,7 @@ function GameState(socket){
     socket.onclose = function(){
         if(gs.blackWin==null||gs.whiteWin==null){
             console.log("aborted");
+			gs.endGameAbort();
         }
     };
 

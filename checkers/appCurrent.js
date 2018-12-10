@@ -148,7 +148,7 @@ wss.on("connection", function connection(ws) {
          */
         console.log(con.id + " disconnected ... , with code: "+code);
 
-        if (code == "1001") {
+        if (code == "1001" || code=="1005") {
             /*
             * if possible, abort the game; if not, the game is already completed
             */
