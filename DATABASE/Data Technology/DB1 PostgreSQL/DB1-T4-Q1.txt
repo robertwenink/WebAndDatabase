@@ -1,0 +1,24 @@
+ecommerce=# SELECT name FROM product;
+name                            
+------------------------------------------------------------
+ Softshell Windwall Jacket Black                           +
+ 
+ Asus Zenbook 4
+ Dell XPS 13
+ Macbook Air 13                                            +
+ 
+ Macbook Pro 13
+ Macbook Pro  15
+ FC Barcelona Home Jersey
+ Real Madrid Away Jersey
+ Rainjacket Blue
+ Fantastic Beasts: The Crimes of Grindewald - J. K. Rowling
+ Naar huis - Harlan Coben
+ Bij zonsondergang - Nora Roberts
+ Een leven met Formule 1 - Olav Mol
+ A4 Paper - 500 sheets                                     +
+ 
+ Assorted Colored Paper - 100 sheets
+ Quilted Jacket White
+ Down Jacket Blue
+(17 rows)

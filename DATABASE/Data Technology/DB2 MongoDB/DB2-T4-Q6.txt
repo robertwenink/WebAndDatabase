@@ -1,0 +1,25 @@
+> db.product.aggregate([ 
+ { 
+  $match: 
+  { 
+   $or: 
+   [{ 
+    category: 11 
+    }, { 
+    category: 13 
+    } 
+   ]
+  }
+ }, 
+ { 
+  $group: 
+  {
+   _id: 
+   {
+    supplier: "$supplier" 
+   } 
+  } 
+ } 
+]).pretty()
+{ "_id" : { "supplier" : "Michael Kors\n" } }
+{ "_id" : { "supplier" : "Samsoe & Samsoe\n" } }

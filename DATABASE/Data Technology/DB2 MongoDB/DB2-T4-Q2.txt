@@ -1,0 +1,5 @@
+> db.orders.find({}, {"customer.name" : 1})
+{ "_id" : 1, "customer" : { "name" : "Alice" } }
+{ "_id" : 2, "customer" : { "name" : "Charlie" } }
+{ "_id" : 3, "customer" : { "name" : "Bob" } }
+{ "_id" : 4, "customer" : { "name" : "Bob" } }

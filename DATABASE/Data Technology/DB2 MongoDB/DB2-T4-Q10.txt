@@ -1,0 +1,22 @@
+db.order_details.aggregate([ 
+ //Stage1
+ {
+  $group: { 
+   _id: "$order_id", 
+   avg_price:
+   {
+    $avg: 
+    {
+     $divide:
+     [ 
+      "$cost" , "$amount"
+     ]
+    } 
+   }
+  } 
+ }
+])
+{ "_id" : 4, "avg_price" : 9.166666666666666 }
+{ "_id" : 3, "avg_price" : 223 }
+{ "_id" : 2, "avg_price" : 9 }
+{ "_id" : 1, "avg_price" : 115 }

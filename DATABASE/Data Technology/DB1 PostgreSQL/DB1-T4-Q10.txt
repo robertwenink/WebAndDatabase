@@ -1,0 +1,8 @@
+ecommerce=# SELECT customer.name, SUM(order_details.cost) AS "Total Cost", SUM(order_details.amount) AS "Total Amount", ROUND( SUM(order_details.cost) / SUM(order_details.amount), 2) AS "Average Cost"  FROM customer LEFT JOIN (orders LEFT JOIN order_details ON orders.order_id = order_details.order_id) ON customer.customer_id = orders.customer GROUP BY customer.name;
+                     name                      | Total Cost | Total Amount | Average Cost 
+-----------------------------------------------+------------+--------------+--------------
+ Bob                                          +|       2703 |           36 |        75
+                                               |            |              | 
+ Alice                                         |        115 |            1 |       115
+ Charlie                                       |         34 |            4 |         8
+(3 rows)

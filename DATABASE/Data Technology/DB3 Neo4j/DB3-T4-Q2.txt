@@ -1,0 +1,9 @@
+MATCH (orders:Orders) WHERE orders.total_cost < 250 RETURN orders; 
++-----------------------------------------------------------------------------------------------+ 
+| orders | 
++-----------------------------------------------------------------------------------------------+ 
+| (:Orders {date: "2018-11-08 11:08:12+01", total_cost: 115, customer_id: "1", order_id: "1"}) | 
+| (:Orders {date: "2018-11-09 01:36:50+01", total_cost: 34, customer_id: "3", order_id: "2"}) | 
+| (:Orders {date: "2018-11-13 11:31:56+01", total_cost: 192, customer_id: "2", order_id: "4"}) | 
++-----------------------------------------------------------------------------------------------+ 
+3 rows available after 15 ms, consumed after another 1 ms neo4j> 

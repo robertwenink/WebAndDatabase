@@ -1,0 +1,293 @@
+** MATCH QUERIES **
+
+- Return only the names of all persons -
+MATCH (p: Person) 
+RETURN p.name;
+ * Size Warning! this will return ALL 500K names, so it might take a minute 
+
+- Return only the names of 5 persons -
+MATCH (p: Person) 
+RETURN p.name
+LIMIT 5;
+
+- Return the imdb_index and year of all titles called The Matrix -
+MATCH (t:Title {title:'The Matrix'}) 
+RETURN t.imdb_index, t.production_year;
+
+- Return all titles from 1999 -
+MATCH (t:Title {production_year: 1999}) 
+RETURN t;
+
+- Return only the title and Millenium Age (years since 2000) of all titles called The Matrix 
+MATCH (t:Title{title: 'The Matrix'}) 
+RETURN t.title, t.production_year-2000 as Millenium_Age;
+
+- Return the production_year as 'year' of all titles called The Matrix 
+MATCH (t:Title{title: 'The Matrix'}) 
+RETURN t.production_year as year;
+
+- Return all distinct imbd_index of all persons -
+MATCH (p: Person) 
+RETURN DISTINCT p.imdb_index;
+
+- Return the name and gender of persons with a name_pcode_cf of A1652 and a name_pcode_nf of J2165 -
+MATCH (p:Person)
+WHERE p.name_pcode_cf = 'A1652'
+AND p.name_pcode_nf = 'J2165' 
+RETURN p.name, p.gender;
+
+MATCH (p: Person{name_pcode_cf: 'A1652', 
+                 name_pcode_nf: 'J2165'}) 
+RETURN p.name, p.gender;
+
+- Return the name and gender of persons with A1652 as their name_pcode_cf, and identified in the database with femenine or masculine gender -
+MATCH (p:Person)
+WHERE p.name_pcode_cf = 'A1652'
+AND (p.gender = 'm' OR p.gender = 'f')
+RETURN p.name, p.gender;
+
+- What is the title and production year of titles that start with 'S'? -
+MATCH (t:Title)
+WHERE t.title =~ 'S.*'
+RETURN t.title, t.production_year;
+
+- Find the title and production year of titles that have 'r' as second letter and end with 'n' -
+MATCH (t:Title)
+WHERE t.title =~ '.r.*n'
+RETURN t.title, t.production_year;
+
+- Find all titles that contain 'Matrix' in their title, and their phonetic_code starts with 'M', and the second letter of their title is not 'e' -
+MATCH (t:Title)
+WHERE t.title =~ '.*Matrix.*' 
+AND t.phonetic_code =~ 'M.*' 
+AND NOT t.title =~ '.e.*' 
+RETURN t;
+
+** NULL AS OPERATOR **
+
+- Find the name and gender of all persons that are the first ones to be stored in the imdb with the same name, this means: they don't have an imdb_index -
+MATCH (p:Person)
+WHERE p.imdb_index IS NULL
+RETURN p.name, p.gender;
+* Size Warning
+
+MATCH (p:Person)
+WHERE p.imdb_index IS NULL
+RETURN p.name, p.gender
+LIMIT 100;
+
+- Return the name and gender of persons with A1652 as their name_pcode_cf, and identified in the database with femenine or masculine gender -
+MATCH (p:Person)
+WHERE p.name_pcode_cf = 'A1652'
+AND (p.gender = 'm' OR p.gender = 'f')
+RETURN p.name, p.gender;
+
+MATCH (p:Person)
+WHERE p.name_pcode_cf = 'A1652'
+AND NOT p.gender IS NULL
+RETURN p.name, p.gender;
+
+- What is the title and production year of all titles produced after 2000 or with no production year? -
+MATCH (t:Title)
+WHERE (t.production_year > 2000 
+         OR t.production_year IS NULL)
+RETURN t.title, t.production_year;
+
+** ORDER **
+
+- Return all titles ordered by year descending -
+MATCH (t:Title)
+RETURN t
+ORDER BY t.production_year DESC;
+
+- Return 1000 titles ordered by year descending and by title alphabetically
+MATCH (t:Title)
+RETURN t
+ORDER BY t.production_year DESC, t.title ASC
+LIMIT 100;
+
+- Return only the title and Millenium Age of 1000 titles ordered by their Millenium Age descending -
+MATCH (t:Title)
+RETURN t.title, t.production_year - 2000 as Millenium_Age 
+ORDER BY Millenium_Age DESC
+LIMIT 1000;
+
+** JOIN **
+
+- Return the names of persons in the database, once for each time they participated in a movie -
+MATCH (p:Person)-[pi:PARTICIPATES_IN]->(c:CastInfo)
+RETURN p.name;
+********** Size Warning! **********
+
+MATCH (p:Person)-[pi:PARTICIPATES_IN]->(c:CastInfo)
+RETURN p.name
+LIMIT 100;
+
+- Return only the title of items of kind movie -
+MATCH (t:Title)-[i:IS_OF_KIND]->(k:KindType {kind_name: 'movie'})
+RETURN t.title;
+
+MATCH (t:Title)-[i:IS_OF_KIND]->(k:KindType)
+WHERE k.kind_name = 'movie'
+RETURN t.title;
+
+- Return titles that have at least one person identified as female in their cast -
+MATCH (t:Title)-[hc:HAS_CAST]-> (c:CastInfo) <-[pi:PARTICIPATES_IN]-(p:Person)
+WHERE p.gender = 'f'
+RETURN DISTINCT(t.title);
+
+** CROSS PRODUCT **
+- Return the cross product of roles and kind types -
+MATCH (r:RoleType), (k:KindType)
+RETURN r.role_name, k.kind_name;
+
+** JOIN **
+- Return only the title of items of movie kind -
+MATCH (t:Title)-[i:IS_OF_KIND]->(k:KindType)
+WHERE k.kind_name = 'movie'
+RETURN t.title;
+
+- Return only the title of items where Keanu Reeves participated -
+MATCH (t:Title)-[hc:HAS_CAST]->(c:CastInfo) <-[pi:PARTICIPATES_IN]-(p:Person)
+WHERE p.name = 'Reeves, Keanu'
+RETURN t.title;
+
+** LEFT JOIN **
+- Return the name of Keanu Reeves for each time he has participated in a title, and the character he performed as -
+MATCH (c:CastInfo) <-[pi:PARTICIPATES_IN]-(p:Person)
+WHERE p.name = 'Reeves, Keanu'
+OPTIONAL MATCH (c)-[pa:PERFORMED_AS]->(cn:CharName)
+RETURN p.name, cn.char_name;
+
+** COUNT **
+
+- What's the number of cast info items in the database? -
+MATCH (c:CastInfo)
+RETURN COUNT(c);
+
+- How many character names are in the database? -
+MATCH (cn:CharName)
+RETURN COUNT(cn.char_name);
+
+- How many unique characters names are in the database? -
+MATCH (cn:CharName)
+RETURN COUNT(DISTINCT(cn.char_name));
+
+- How many characters named Neo are in the database? -
+MATCH (cn:CharName{char_name: 'Neo'})
+RETURN COUNT(cn);
+
+- How many times has someone been casted as Neo? -
+MATCH (cn:CharName{char_name: 'Neo'})<-[pa:PERFORMED_AS]-(c:CastInfo)
+RETURN COUNT(c);
+
+** SUM ** Once again, we don't have opening_sales so these queries are hypothetical
+
+- Return the total opening sales of all titles called The Matrix - 
+MATCH (t:Title)
+WHERE t.title = 'The Matrix'
+RETURN SUM(t.opening_sales);   ** try to substitute opening_sales with production_year to get a result
+
+- Return the total opening sales of all titles for each production year -
+MATCH (t:Title)
+RETURN t.production_year, SUM(t.opening_sales);     ** try to substitute opening_sales with production_year to get a result
+
+** MAX **
+- Find the year of the latest movie where Keanu Reeves participated -
+MATCH (t:Title)-[hc:HAS_CAST]->(c:CastInfo)<-[pi:PARTICIPATES_IN]-(p:Person)
+WHERE p.name = 'Reeves, Keanu'
+RETURN MAX(t.production_year);
+
+** GROUP BY **
+-- Neo4j will automatically group when possible --
+
+- For all titles, return the title, production year and size of cast -
+MATCH (t:Title)-[hc:HAS_CAST]->(c:CastInfo)<-[pi:PARTICIPATES_IN]-(p:Person)
+RETURN t.title, t.production_year, COUNT(c);
+
+** HAVING -- No clause, but WITH + WHERE is equivalent **
+- Find the name of persons that the average year of the titles they participate is greater than 2000 -
+MATCH (t:Title)-[hc:HAS_CAST]->(c:CastInfo)<-[pi:PARTICIPATES_IN]-(p:Person)
+WITH p.name AS actor, avg(t.production_year) AS average_acting_year
+WHERE average_acting_year > 2000
+RETURN actor;
+
+- Find the name and average acting year of persons that the average year of the titles they participate is greater than 2000 -
+MATCH (t:Title)-[hc:HAS_CAST]->(c:CastInfo)<-[pi:PARTICIPATES_IN]-(p:Person)
+WITH p.name AS actor, avg(t.production_year) AS average_acting_year
+WHERE average_acting_year > 2000
+RETURN actor, average_acting_year;
+
+- Return the name of persons that participated in more than 2 titles in 2005 -
+MATCH (t:Title)-[hc:HAS_CAST]->(c:CastInfo)<-[pi:PARTICIPATES_IN]-(p:Person)
+WHERE t.production_year = 2005
+WITH p.name AS actor, COUNT(t) AS movie_count
+WHERE movie_count > 2
+RETURN actor;
+
+
+** JOIN VS. Nested Queries **
+
+- Find only the title of all items of kind movie JOIN-
+MATCH (t:Title)-[i:IS_OF_KIND]->(k:KindType {kind_name: 'movie'})
+RETURN t.title;
+
+- Find only the title of all items of kind movie Nested 1-
+MATCH (k:KindType{kind_name: 'movie'})
+WITH k.kind_id AS movie_kind
+MATCH (t:Title)
+WHERE t.kind_id = movie_kind
+RETURN t.title;
+
+- Find only the title of all items of kind movie Nested 2-
+MATCH (t:Title)
+WITH t
+MATCH (k:KindType)
+WHERE k.kind_id = t.kind_id
+AND k.kind_name = 'movie'
+RETURN t.title;
+
+- Find only the title of items where Keanu Reeves has participated JOIN -
+MATCH (t:Title)-[hc:HAS_CAST]->(c:CastInfo)<-[pi:PARTICIPATES_IN]-(p:Person)
+WHERE p.name = 'Reeves, Keanu'
+RETURN t.title
+
+- Find only the title of items where Keanu Reeves has participated Nested -
+MATCH (p:Person{name: 'Reeves, Keanu'})
+WITH p.person_id AS Keanu
+    MATCH (c:CastInfo)
+    WHERE c.person_id = Keanu
+    WITH c.movie_id as Casting
+        MATCH (t:Title)
+        WHERE t.title_id = Casting
+        RETURN t.title;
+
+
+- Find the only the name of all people that have participated in a title with Keanu Reeves -
+MATCH (p:Person)-[pi:PARTICIPATES_IN]->(c:CastInfo)<-[hc:HAS_CAST]-(t:Title)-[hc2:HAS_CAST]->(c2:CastInfo)<-[pi2:PARTICIPATES_IN]-(p2:Person)
+WHERE p.name = 'Reeves, Keanu'
+RETURN DISTINCT(p2.name);
+
+** IN/NOT IN **
+- Find only the title of all items that are a series or episode from 2005 using OR -
+MATCH (t:Title)-[ik:IS_OF_KIND]->(k:KindType)
+WHERE t.production_year = 2005
+AND (k.kind_name = 'season' OR k.kind_name = 'episode')
+RETURN t.title;
+
+- Find only the title of all items that are a series or episode from 2005 using IN -
+MATCH (t:Title)-[ik:IS_OF_KIND]->(k:KindType)
+WHERE t.production_year = 2005
+AND k.kind_name IN ['season', 'episode']
+RETURN t.title;
+
+- Find only the name of people that have not participated with Keanu Reeves, but have participated with Alec Baldwin
+MATCH (p:Person)-[pi:PARTICIPATES_IN]->(c:CastInfo)<-[hc:HAS_CAST]-(t:Title)
+WHERE p.name = 'Reeves, Keanu'
+WITH collect(t.title_id) AS keanu_movies
+	MATCH (p2:Person)-[:PARTICIPATES_IN]->(c2:CastInfo)<-[:HAS_CAST]-(:Title)-[:HAS_CAST]->(:CastInfo)<-[:PARTICIPATES_IN]-(p3:Person)
+    WHERE NOT c2.movie_id IN keanu_movies
+    AND p3.name = 'Baldwin, Alec'
+    RETURN p2.name;
+
+This example mixes a subquery, a pattern, and a NOT -- IN ...

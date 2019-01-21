@@ -1,0 +1,75 @@
+> db.orders.find({ "details.category_tree" : "Clothing" } , { }).pretty()
+{
+	"_id" : 1,
+	"customer" : {
+		"_id" : 1,
+		"name" : "Alice"
+	},
+	"date" : ISODate("2018-11-08T10:08:12Z"),
+	"details" : [
+		{
+			"product_id" : 1,
+			"product" : "Softshell Windwall Jacket Black",
+			"supplier" : "North Face",
+			"product_price" : 115,
+			"amount" : 1,
+			"cost" : 115,
+			"category_tree" : [
+				"Men's Jackets",
+				"Men's Clothing",
+				"Clothing"
+			]
+		}
+	],
+	"total" : 115
+}
+{
+	"_id" : 3,
+	"customer" : {
+		"_id" : 2,
+		"name" : "Bob"
+	},
+	"date" : ISODate("2018-11-11T14:03:21Z"),
+	"details" : [
+		{
+			"product_id" : 1,
+			"product" : "Softshell Windwall Jacket Black",
+			"supplier" : "North Face",
+			"product_price" : 115,
+			"amount" : 5,
+			"cost" : 575,
+			"category_tree" : [
+				"Men's Jackets",
+				"Men's Clothing",
+				"Clothing"
+			]
+		},
+		{
+			"product_id" : 10,
+			"product" : "Quilted Jacket White",
+			"supplier" : "Samsoe & Samsoe",
+			"product_price" : 280,
+			"amount" : 3,
+			"cost" : 840,
+			"category_tree" : [
+				"Women's Jackets",
+				"Women's Clothing",
+				"Clothing"
+			]
+		},
+		{
+			"product_id" : 11,
+			"product" : "Down Jacket Blue",
+			"supplier" : "Michael Kors",
+			"product_price" : 274,
+			"amount" : 4,
+			"cost" : 1096,
+			"category_tree" : [
+				"Women's Jackets",
+				"Women's Clothing",
+				"Clothing"
+			]
+		}
+	],
+	"total" : 2511
+}

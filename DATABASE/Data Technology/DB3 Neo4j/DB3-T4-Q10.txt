@@ -1,0 +1,15 @@
+neo4j> MATCH ((p:Product)-[:IS_OF_CATEGORY*..10]-(c:Category))
+       WHERE c.category_name = "Clothing"
+       RETURN p;
++-------------------------------------------------------------------------------------------------------------------------------------+
+| p                                                                                                                                   |
++-------------------------------------------------------------------------------------------------------------------------------------+
+| (:Product {category: "12", product_name: "Softshell Windwall Jacket Black", price: "115", product_id: "1", supplier: "North Face"}) |
+| (:Product {category: "12", product_name: "Rainjacket Blue", price: "134", supplier: "Rains", product_id: "7"})                      |
+| (:Product {category: "11", product_name: "Quilted Jacket White", price: "280", product_id: "10", supplier: "Samsoe & Samsoe
+"})     |
+| (:Product {category: "11", product_name: "Down Jacket Blue", price: "274", product_id: "11", supplier: "Michael Kors
+"})            |
++-------------------------------------------------------------------------------------------------------------------------------------+
+
+4 rows available after 3 ms, consumed after another 0 ms

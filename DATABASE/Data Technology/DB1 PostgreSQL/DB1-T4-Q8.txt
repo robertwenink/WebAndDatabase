@@ -1,0 +1,24 @@
+ecommerce=# SELECT name, SUM (amount) FROM product LEFT JOIN order_details ON product.product_id = order_details.product GROUP BY product.name;
+                            name                            | sum 
+------------------------------------------------------------+-----
+ FC Barcelona Home Jersey                                   |    
+ Macbook Pro  15                                            |    
+ Een leven met Formule 1 - Olav Mol                         |   3
+ Fantastic Beasts: The Crimes of Grindewald - J. K. Rowling |   2
+ Rainjacket Blue                                            |    
+ Macbook Pro 13                                             |    
+ Bij zonsondergang - Nora Roberts                           |   2
+ Macbook Air 13                                            +|    
+                                                            | 
+ Down Jacket Blue                                           |   4
+ Asus Zenbook 4                                             |    
+ Dell XPS 13                                                |    
+ Quilted Jacket White                                       |   3
+ Naar huis - Harlan Coben                                   |   3
+ Real Madrid Away Jersey                                    |    
+ A4 Paper - 500 sheets                                     +|  10
+                                                            | 
+ Assorted Colored Paper - 100 sheets                        |   8
+ Softshell Windwall Jacket Black                           +|   6
+                                                            | 
+(17 rows)

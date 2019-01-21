@@ -1,0 +1,16 @@
+ecommerce=# SELECT * FROM category WHERE parent_category IN (SELECT category_id FROM category WHERE parent_category IS NULL);
+ category_id |         name         | parent_category 
+-------------+----------------------+-----------------
+           4 | Football Equipment   |               1
+           7 | Computers & Laptops  |               2
+          10 | Men's Clothing       |               3
+          11 | Women's Clothing     |               3
+          15 | Thrillers & Suspense |              14
+          16 | Biographic          +|              14
+             |                      | 
+          17 | Young Adult         +|              14
+             |                      | 
+          19 | Stationery           |              18
+          21 | Paper Products      +|              18
+             |                      | 
+(9 rows)

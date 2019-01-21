@@ -1,0 +1,145 @@
+ecommerce=# SELECT VERSION();
+version                                                          
+----------------------------------------------------------------------------------------------------------------------------
+ PostgreSQL 11.1 on x86\_64-apple-darwin, compiled by Apple LLVM version 6.0 (clang-600.0.54) (based on LLVM 3.5svn), 64-bit
+(1 row)
+
+ecommerce=# SELECT now();
+now
+-------------------------------
+ 2019-01-09 15:58:26.034977+01
+(1 row)
+
+ecommerce=# HELP
+You are using psql, the command-line interface to PostgreSQL.
+Type:  \copyright for distribution terms
+\h for help with SQL commands
+\? for help with psql commands
+\g or terminate with semicolon to execute query
+\q to quit
+
+ecommerce=# \h CREATE TABLE
+Command:     CREATE TABLE
+Description: define a new table
+Syntax:
+CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] table\_name ( [
+  \{ column\_name data\_type [ COLLATE collation ] [ column\_constraint [ ... ] ]
+    | table\_constraint
+    | LIKE source\_table [ like\_option ... ] \}
+    [, ... ]
+] )
+[ INHERITS ( parent\_table [, ... ] ) ]
+[ PARTITION BY \{ RANGE | LIST | HASH \} ( \{ column\_name | ( expression ) \} [ COLLATE collation ] [ opclass ] [, ... ] ) ]
+[ WITH ( storage\_parameter [= value] [, ... ] ) | WITH OIDS | WITHOUT OIDS ]
+[ ON COMMIT \{ PRESERVE ROWS | DELETE ROWS | DROP \} ]
+[ TABLESPACE tablespace\_name ]
+
+CREATE [ [ GLOBAL | LOCAL ] { TEMPORARY | TEMP } | UNLOGGED ] TABLE [ IF NOT EXISTS ] table\_name
+    OF type\_name [ (
+  \{ column\_name [ WITH OPTIONS ] [ column\_constraint [ ... ] ]
+    | table\_constraint \
+    [, ... ]
+
+ecommerce=# \h END
+Command:     END
+Description: commit the current transaction
+Syntax:
+END [ WORK | TRANSACTION ]
+
+ecommerce=# \l
+List of databases
+   Name    |  Owner   | Encoding | Collate | Ctype |   Access privileges   
+-----------+----------+----------+---------+-------+-----------------------
+ ecommerce | postgres | UTF8     | C       | C     | 
+ postgres  | postgres | UTF8     | C       | C     | 
+ template0 | postgres | UTF8     | C       | C     | =c/postgres          +
+           |          |          |         |       | postgres=CTc/postgres
+ template1 | postgres | UTF8     | C       | C     | =c/postgres          +
+           |          |          |         |       | postgres=CTc/postgres
+(4 rows)
+
+ecommerce=# \dt
+List of relations
+ Schema |     Name      | Type  |  Owner   
+--------+---------------+-------+----------
+ public | category      | table | postgres
+ public | customer      | table | postgres
+ public | order_details | table | postgres
+ public | orders        | table | postgres
+ public | product       | table | postgres
+(5 rows)
+
+ecommerce=# \d category
+                          Table "public.category"
+     Column      |          Type          | Collation | Nullable | Default 
+-----------------+------------------------+-----------+----------+---------
+ category_id     | smallint               |           | not null | 
+ name            | character varying(255) |           | not null | 
+ parent_category | smallint               |           |          | 
+Indexes:
+    "category_pkey" PRIMARY KEY, btree (category_id)
+    "fki_category_parent_category_fkey" btree (parent_category)
+Foreign-key constraints:
+    "category_parent_category_fkey" FOREIGN KEY (parent_category) REFERENCES category(category_id)
+Referenced by:
+    TABLE "category" CONSTRAINT "category_parent_category_fkey" FOREIGN KEY (parent_category) REFERENCES category(category_id)
+    TABLE "product" CONSTRAINT "product_category_fkey" FOREIGN KEY (category) REFERENCES category(category_id)
+
+ecommerce=# \d customer
+                   Table "public.customer"
+   Column    |     Type      | Collation | Nullable | Default 
+-------------+---------------+-----------+----------+---------
+ customer_id | smallint      |           | not null | 
+ name        | character(45) |           | not null | 
+Indexes:
+    "customer_pkey" PRIMARY KEY, btree (customer_id)
+Referenced by:
+    TABLE "orders" CONSTRAINT "order_customer_fkey" FOREIGN KEY (customer) REFERENCES customer(customer_id)
+    
+ecommerce=# \d order_details
+             Table "public.order_details"
+  Column  |   Type   | Collation | Nullable | Default 
+----------+----------+-----------+----------+---------
+ order_id | smallint |           | not null | 
+ product  | smallint |           | not null | 
+ amount   | integer  |           | not null | 
+ cost     | integer  |           |          | 
+Indexes:
+    "fki_order_details_order_fkey" btree (order_id)
+    "fki_order_details_product_fkey" btree (product)
+Foreign-key constraints:
+    "order_details_order_fkey" FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    "order_details_product_fkey" FOREIGN KEY (product) REFERENCES product(product_id)
+    
+ecommerce=# \d orders
+                         Table "public.orders"
+   Column   |           Type           | Collation | Nullable | Default 
+------------+--------------------------+-----------+----------+---------
+ order_id   | smallint                 |           | not null | 
+ customer   | smallint                 |           | not null | 
+ date       | timestamp with time zone |           | not null | 
+ total_cost | integer                  |           |          | 
+Indexes:
+    "order_pkey" PRIMARY KEY, btree (order_id)
+    "fki_order_customer_fkey" btree (customer)
+Foreign-key constraints:
+    "order_customer_fkey" FOREIGN KEY (customer) REFERENCES customer(customer_id)
+Referenced by:
+    TABLE "order_details" CONSTRAINT "order_details_order_fkey" FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    
+ecommerce=# \d product
+                        Table "public.product"
+   Column   |          Type          | Collation | Nullable | Default 
+------------+------------------------+-----------+----------+---------
+ product_id | smallint               |           | not null | 
+ name       | character varying(255) |           | not null | 
+ supplier   | character varying(255) |           | not null | 
+ category   | smallint               |           |          | 
+ price      | integer                |           |          | 
+Indexes:
+    "product_pkey" PRIMARY KEY, btree (product_id)
+    "fki_product_category_fkey" btree (category)
+Foreign-key constraints:
+    "product_category_fkey" FOREIGN KEY (category) REFERENCES category(category_id)
+Referenced by:
+    TABLE "order_details" CONSTRAINT "order_details_product_fkey" FOREIGN KEY (product) REFERENCES product(product_id)

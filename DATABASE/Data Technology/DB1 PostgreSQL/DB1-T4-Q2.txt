@@ -1,0 +1,11 @@
+ecommerce=# SELECT name FROM product WHERE price < 25;
+name                            
+------------------------------------------------------------
+ Fantastic Beasts: The Crimes of Grindewald - J. K. Rowling
+ Naar huis - Harlan Coben
+ Bij zonsondergang - Nora Roberts
+ Een leven met Formule 1 - Olav Mol
+ A4 Paper - 500 sheets                                     +
+ 
+ Assorted Colored Paper - 100 sheets
+(6 rows)

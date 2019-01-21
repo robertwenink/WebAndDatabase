@@ -1,0 +1,10 @@
+ecommerce=# SELECT * FROM category WHERE parent_category IS NULL;
+ category_id |       name        | parent_category 
+-------------+-------------------+-----------------
+           1 | Sports & Outdoors |                
+           2 | Electronics       |                
+           3 | Clothing          |                
+          14 | Books            +|                
+             |                   | 
+          18 | Office Supplies   |                
+(5 rows)

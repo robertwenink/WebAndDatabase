@@ -1,0 +1,11 @@
+
+MATCH(category:Category) WHERE category.parent_category IS NULL RETURN category;
++--------------------------------------------------------------------+
+| category                                                           |
++--------------------------------------------------------------------+
+| (:Category {category_id: "1", category_name: "Sports & Outdoors"}) |
+| (:Category {category_id: "2", category_name: "Electronics"})       |
+| (:Category {category_id: "3", category_name: "Clothing"})          |
+| (:Category {category_id: "14", category_name: "Books"})            |
+| (:Category {category_id: "18", category_name: "Office Supplies"})  |
++--------------------------------------------------------------------+                                                                                                                                                                                                                                                                                                                                                                5 rows available after 65 ms, consumed after another 3 ms 

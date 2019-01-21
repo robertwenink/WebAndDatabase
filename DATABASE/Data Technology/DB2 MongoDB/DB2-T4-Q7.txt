@@ -1,0 +1,44 @@
+db.order_details.aggregate([ 
+ //Stage1
+ {
+  $match: {amount: {$gte: 3 } } 
+ }, 
+ //Stage2
+ {
+  $lookup: 
+  {
+   from: "orders", 
+   localField: "order_id", 
+   foreignField: "order_id", 
+   as: "orders_docs" 
+  } 
+ },
+ //Stage3
+ {
+  $lookup:
+  {
+   from: "customer",
+   localField: "orders_docs.customer",
+   foreignField: "customer_id",
+   as: "customer_docs"
+  }
+ },
+ //Stage4
+ {
+  $project:
+  {
+   _id : 0,
+   "customer_docs.name" : 1,
+   product : 1,
+   amount : 1
+  }
+ }
+])
+
+{ "product" : 17, "amount" : 3, "customer_docs" : [ { "name" : "Charlie" } ] }
+{ "product" : 1, "amount" : 5, "customer_docs" : [ { "name" : "Bob\n                                         " } ] }
+{ "product" : 10, "amount" : 3, "customer_docs" : [ { "name" : "Bob\n                                         " } ] }
+{ "product" : 11, "amount" : 4, "customer_docs" : [ { "name" : "Bob\n                                         " } ] }
+{ "product" : 15, "amount" : 3, "customer_docs" : [ { "name" : "Bob\n                                         " } ] }
+{ "product" : 16, "amount" : 10, "customer_docs" : [ { "name" : "Bob\n                                         " } ] }
+{ "product" : 17, "amount" : 5, "customer_docs" : [ { "name" : "Bob\n                                         " } ] }

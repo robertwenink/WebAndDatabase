@@ -1,0 +1,63 @@
+db.order_details.aggregate([ 
+ //Stage1
+ {
+  $lookup: 
+  {
+   from: "product", 
+   localField: "product", 
+   foreignField: "product_id", 
+   as: "product_docs" 
+  } 
+ },
+ //Stage2
+ {
+  $lookup:
+  {
+   from: "category",
+   localField: "product_docs.category",
+   foreignField: "category_id",
+   as: "category_docs"
+  }
+ },
+ //Stage3
+ { 
+  $match: 
+  { 
+   $or: 
+   [
+    { "category_docs.category_id": 10 }, 
+    { "category_docs.parent_category": 10 }
+   ]
+  }
+ },
+ //Stage4
+ {
+  $lookup: 
+  {
+   from: "orders", 
+   localField: "order_id", 
+   foreignField: "order_id", 
+   as: "orders_docs"
+  } 
+ },
+ //Stage5
+ {
+  $lookup:
+  {
+   from: "customer",
+   localField: "orders_docs.customer",
+   foreignField: "customer_id",
+   as: "customer_docs"
+  }
+ },
+ //Stage6
+ {
+  $project:
+  {
+   _id : 0,
+   "customer_docs.name" : 1
+  }
+ }
+])
+{ "customer_docs" : [ { "name" : "Alice" } ] }
+{ "customer_docs" : [ { "name" : "Bob\n                                         " } ] }

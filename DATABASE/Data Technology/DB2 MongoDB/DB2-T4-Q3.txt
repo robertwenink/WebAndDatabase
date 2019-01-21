@@ -1,0 +1,4 @@
+> db.orders.find({ total : { $gt: 100 } } , { "customer.name" : 1, total : 1 })
+{ "_id" : 1, "customer" : { "name" : "Alice" }, "total" : 115 }
+{ "_id" : 3, "customer" : { "name" : "Bob" }, "total" : 2511 }
+{ "_id" : 4, "customer" : { "name" : "Bob" }, "total" : 192 }

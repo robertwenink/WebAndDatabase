@@ -1,0 +1,196 @@
+> db.orders.find().pretty()
+{
+	"_id" : 1,
+	"customer" : {
+		"_id" : 1,
+		"name" : "Alice"
+	},
+	"date" : ISODate("2018-11-08T10:08:12Z"),
+	"details" : [
+		{
+			"product_id" : 1,
+			"product" : "Softshell Windwall Jacket Black",
+			"supplier" : "North Face",
+			"product_price" : 115,
+			"amount" : 1,
+			"cost" : 115,
+			"category_tree" : [
+				"Men's Jackets",
+				"Men's Clothing",
+				"Clothing"
+			]
+		}
+	],
+	"total" : 115
+}
+{
+	"_id" : 2,
+	"customer" : {
+		"_id" : 3,
+		"name" : "Charlie"
+	},
+	"date" : ISODate("2018-11-09T00:36:50Z"),
+	"details" : [
+		{
+			"product_id" : 13,
+			"product" : "Naar huis - Harlan Coben",
+			"supplier" : "Boekerij",
+			"product_price" : 10,
+			"amount" : 1,
+			"cost" : 10,
+			"category_tree" : [
+				"Thrillers & Suspense",
+				"Books"
+			]
+		},
+		{
+			"product_id" : 17,
+			"product" : "Assorted Colored Paper - 100 sheets",
+			"supplier" : "Dunder Mifflin Paper Company, Inc",
+			"product_price" : 8,
+			"amount" : 3,
+			"cost" : 24,
+			"category_tree" : [
+				"Copy and Printing Paper",
+				"Paper Products",
+				"Office Supplies"
+			]
+		}
+	],
+	"total" : 34
+}
+{
+	"_id" : 3,
+	"customer" : {
+		"_id" : 2,
+		"name" : "Bob"
+	},
+	"date" : ISODate("2018-11-11T14:03:21Z"),
+	"details" : [
+		{
+			"product_id" : 1,
+			"product" : "Softshell Windwall Jacket Black",
+			"supplier" : "North Face",
+			"product_price" : 115,
+			"amount" : 5,
+			"cost" : 575,
+			"category_tree" : [
+				"Men's Jackets",
+				"Men's Clothing",
+				"Clothing"
+			]
+		},
+		{
+			"product_id" : 10,
+			"product" : "Quilted Jacket White",
+			"supplier" : "Samsoe & Samsoe",
+			"product_price" : 280,
+			"amount" : 3,
+			"cost" : 840,
+			"category_tree" : [
+				"Women's Jackets",
+				"Women's Clothing",
+				"Clothing"
+			]
+		},
+		{
+			"product_id" : 11,
+			"product" : "Down Jacket Blue",
+			"supplier" : "Michael Kors",
+			"product_price" : 274,
+			"amount" : 4,
+			"cost" : 1096,
+			"category_tree" : [
+				"Women's Jackets",
+				"Women's Clothing",
+				"Clothing"
+			]
+		}
+	],
+	"total" : 2511
+}
+{
+	"_id" : 4,
+	"customer" : {
+		"_id" : 2,
+		"name" : "Bob"
+	},
+	"date" : ISODate("2018-11-13T10:31:56Z"),
+	"details" : [
+		{
+			"product_id" : 12,
+			"product" : "Fantastic Beasts: The Crimes of Grindewald - J. K. Rowling",
+			"supplier" : "Little Brown UK",
+			"product_price" : 11,
+			"amount" : 2,
+			"cost" : 22,
+			"category_tree" : [
+				"Young Adult",
+				"Books"
+			]
+		},
+		{
+			"product_id" : 13,
+			"product" : "Naar huis - Harlan Coben",
+			"supplier" : "Boekerij",
+			"product_price" : 10,
+			"amount" : 2,
+			"cost" : 20,
+			"category_tree" : [
+				"Thrillers & Suspense",
+				"Books"
+			]
+		},
+		{
+			"product_id" : 14,
+			"product" : "Bij zonsondergang - Nora Roberts",
+			"supplier" : "Boekerij",
+			"product_price" : 10,
+			"amount" : 2,
+			"cost" : 20,
+			"category_tree" : [
+				"Thrillers & Suspense",
+				"Books"
+			]
+		},
+		{
+			"product_id" : 15,
+			"product" : "Een leven met Formule 1 - Olav Mol",
+			"supplier" : "Q",
+			"product_price" : 10,
+			"amount" : 3,
+			"cost" : 30,
+			"category_tree" : [
+				"Biographic",
+				"Books"
+			]
+		},
+		{
+			"product_id" : 16,
+			"product" : "A4 Paper - 500 sheets",
+			"supplier" : "Double A",
+			"product_price" : 6,
+			"amount" : 10,
+			"cost" : 60,
+			"category_tree" : [
+				"Copy and Printing Paper",
+				"Paper Products",
+				"Office Supplies"
+			]
+		},
+		{
+			"product_id" : 17,
+			"product" : "Assorted Colored Paper - 100 sheets",
+			"supplier" : "Dunder Mifflin Paper Company, Inc",
+			"product_price" : 8,
+			"amount" : 5,
+			"cost" : 40,
+			"category_tree" : [
+				"Copy and Printing Paper",
+				"Paper Products",
+				"Office Supplies"
+			]
+		}
+	],
+	"total" : 192
+}

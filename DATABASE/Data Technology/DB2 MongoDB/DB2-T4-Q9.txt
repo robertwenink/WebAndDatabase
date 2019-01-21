@@ -1,0 +1,16 @@
+db.order_details.aggregate([ 
+ //Stage1
+ {
+  $group: { 
+   _id: "$order_id", 
+   total_price: 
+   {
+    $sum: "$cost"
+   }, 
+  } 
+ }
+])
+{ "_id" : 4, "total_price" : 192 }
+{ "_id" : 3, "total_price" : 2511 }
+{ "_id" : 2, "total_price" : 34 }
+{ "_id" : 1, "total_price" : 115 }

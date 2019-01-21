@@ -1,0 +1,12 @@
+
+MATCH (c:Customer {customer_name: "Bob"})-[:ORDERED]->(o:Orders)-[:CONTAINS]->(p:Product)-[:IS_OF_CATEGORY]->(n:Category) WHERE NOT (:Category)-[:IS_OF_CATEGORY]->(n) WITH count(n) as counts RETURN sum(counts);
++-------------------------------------------------------------------------------------------------------------+
+| n                                                                                                | count(n) |
++-------------------------------------------------------------------------------------------------------------+
+| (:Category {parent_category: "21", category_name: "Copy and Printing Paper", category_id: "22"}) | 2        |
+| (:Category {parent_category: "14", category_name: "Biographic", category_id: "16"})              | 1        |
+| (:Category {parent_category: "10", category_name: "Men's Jackets", category_id: "12"})           | 1        |
+| (:Category {parent_category: "14", category_name: "Young Adult", category_id: "17"})             | 1        |
+| (:Category {parent_category: "14", category_name: "Thrillers & Suspense", category_id: "15"})    | 2        |
++-------------------------------------------------------------------------------------------------------------+
+of

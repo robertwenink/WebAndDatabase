@@ -1,0 +1,22 @@
+neo4j> MATCH (c:Customer {customer_name : "Bob"})-[:ORDERED]->(:Orders)-[:CONTAINS]->(pb:Product),
+       (cus:Customer {customer_name : "Charlie"})-[:ORDERED]->(:Orders)-[:CONTAINS]->(pc:Product)
+       WHERE NOT (cus:Customer {customer_name : "Charlie"})-[:ORDERED]->(:Orders)-[:CONTAINS]->(pb:Product)
+       RETURN DISTINCT pb;
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| pb                                                                                                                                                                  |
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| (:Product {category: "15", product_name: "Bij zonsondergang - Nora Roberts", price: "10", supplier: "Boekerij", product_id: "14"})                                  |
+| (:Product {category: "16", product_name: "Een leven met Formule 1 - Olav Mol", price: "10", supplier: "Q
+", product_id: "15"})                                      |
+| (:Product {category: "22", product_name: "A4 Paper - 500 sheets
+", price: "6", supplier: "Double A
+", product_id: "16"})                                            |
+| (:Product {category: "17", product_name: "Fantastic Beasts: The Crimes of Grindewald - J. K. Rowling", price: "11", product_id: "12", supplier: "Little Brown UK"}) |
+| (:Product {category: "11", product_name: "Quilted Jacket White", price: "280", product_id: "10", supplier: "Samsoe & Samsoe
+"})                                     |
+| (:Product {category: "11", product_name: "Down Jacket Blue", price: "274", product_id: "11", supplier: "Michael Kors
+"})                                            |
+| (:Product {category: "12", product_name: "Softshell Windwall Jacket Black", price: "115", product_id: "1", supplier: "North Face"})                                 |
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+7 rows available after 1 ms, consumed after another 1 ms

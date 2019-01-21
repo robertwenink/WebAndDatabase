@@ -1,0 +1,18 @@
+neo4j> MATCH (c:Customer)-[:ORDERED]->(:Orders)-[:CONTAINS]->(p:Product)-[:IS_OF_CATEGORY*0..5]->(cat:Category)
+       WHERE cat.category_name = "Paper Products" OR cat.category_name = "Books" OR cat.category_name = "Ultrabooks"
+       RETURN c.customer_name, cat.category_name , p.product_name;
++----------------------------------------------------------------------------------------------------+
+| c.customer_name | cat.category_name | p.product_name                                               |
++----------------------------------------------------------------------------------------------------+
+| "Charlie"       | "Books"           | "Naar huis - Harlan Coben"                                   |
+| "Charlie"       | "Paper Products"  | "Assorted Colored Paper - 100 sheets"                        |
+| "Bob"           | "Books"           | "Bij zonsondergang - Nora Roberts"                           |
+| "Bob"           | "Books"           | "Een leven met Formule 1 - Olav Mol"                         |
+| "Bob"           | "Paper Products"  | "A4 Paper - 500 sheets
+"                                     |
+| "Bob"           | "Paper Products"  | "Assorted Colored Paper - 100 sheets"                        |
+| "Bob"           | "Books"           | "Fantastic Beasts: The Crimes of Grindewald - J. K. Rowling" |
+| "Bob"           | "Books"           | "Naar huis - Harlan Coben"                                   |
++----------------------------------------------------------------------------------------------------+
+
+8 rows available after 6 ms, consumed after another 1 ms

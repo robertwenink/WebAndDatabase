@@ -1,0 +1,44 @@
+db.product.aggregate([ 
+ //Stage1
+ {
+  $group: { 
+   _id: null, 
+   max_price: 
+   {
+    $max: "$price" 
+   }
+  } 
+ },
+ //Stage2
+ {
+  $lookup: 
+  {
+   from: "product", 
+   localField: "max_price", 
+   foreignField: "price", 
+   as: "product_docs" 
+  } 
+ },
+ //Stage3
+ {
+  $lookup:
+  {
+   from: "category",
+   localField: "product_docs.category",
+   foreignField: "category_id",
+   as: "category_docs"
+  }
+ },
+ //Stage4
+ {
+  $project:
+  {
+   _id : 0,
+   max_price : 1,
+   "product_docs.name" : 1,
+   "category_docs.name" : 1
+  }
+ }
+])
+
+{ "max_price" : 2399, "product_docs" : [ { "name" : "Macbook Pro  15" } ], "category_docs" : [ { "name" : "Macbooks" } ] }

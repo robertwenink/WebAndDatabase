@@ -1,0 +1,8 @@
+
+MATCH (c:Customer {customer_name: "Bob"})-[:ORDERED]->(o:Orders)-[:CONTAINS]->(p:Product)-[:IS_OF_CATEGORY]->(n:Category) WHERE NOT (:Category)-[:IS_OF_CATEGORY]->(n) RETURN n, count(n);
++-------------+
+| sum(counts) |
++-------------+
+| 7           |
++-------------+
+

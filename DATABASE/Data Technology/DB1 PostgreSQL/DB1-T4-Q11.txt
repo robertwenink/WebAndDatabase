@@ -1,0 +1,5 @@
+ecommerce=# SELECT COUNT(*) FROM (SELECT product.name FROM order_details, product WHERE order_details.product = product.product_id AND (product.category = 3 OR product.category = 10 OR product.category = 11 OR product.category = 12 OR product.category = 13) GROUP BY product.name) AS "table";
+ count 
+-------
+     3
+(1 row)

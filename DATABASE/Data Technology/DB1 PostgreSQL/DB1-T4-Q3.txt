@@ -1,0 +1,8 @@
+ecommerce=# SELECT name FROM product WHERE supplier = 'Apple';
+      name       
+-----------------
+ Macbook Air 13 +
+ 
+ Macbook Pro 13
+ Macbook Pro  15
+(3 rows)

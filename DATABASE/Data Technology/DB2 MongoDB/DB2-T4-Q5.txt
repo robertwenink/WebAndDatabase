@@ -1,0 +1,5 @@
+> db.orders.find({ } , { date : 1 }).sort({ date : -1 })
+{ "_id" : 4, "date" : ISODate("2018-11-13T10:31:56Z") }
+{ "_id" : 3, "date" : ISODate("2018-11-11T14:03:21Z") }
+{ "_id" : 2, "date" : ISODate("2018-11-09T00:36:50Z") }
+{ "_id" : 1, "date" : ISODate("2018-11-08T10:08:12Z") }

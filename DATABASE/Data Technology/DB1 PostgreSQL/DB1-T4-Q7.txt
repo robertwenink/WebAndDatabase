@@ -1,0 +1,6 @@
+ecommerce=# SELECT supplier FROM product GROUP BY supplier HAVING COUNT (supplier) > 1;
+ supplier 
+----------
+ Boekerij
+ Apple
+(2 rows)

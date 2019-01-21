@@ -1,0 +1,13 @@
+neo4j> MATCH (c:Customer)-[:ORDERED]->(:Orders)-[:CONTAINS]->(p:Product)-[:IS_OF_CATEGORY]->(:Category)-[:IS_OF_CATEGORY]->(cat:Category)
+       WHERE (c.customer_name = "Charlie" OR c.customer_name = "Bob") AND cat.category_name = "Books"
+       RETURN DISTINCT p.product_name;
++--------------------------------------------------------------+
+| p.product_name                                               |
++--------------------------------------------------------------+
+| "Bij zonsondergang - Nora Roberts"                           |
+| "Een leven met Formule 1 - Olav Mol"                         |
+| "Fantastic Beasts: The Crimes of Grindewald - J. K. Rowling" |
+| "Naar huis - Harlan Coben"                                   |
++--------------------------------------------------------------+
+
+4 rows available after 5 ms, consumed after another 1 ms
